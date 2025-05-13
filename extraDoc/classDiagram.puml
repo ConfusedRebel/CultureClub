@@ -1,5 +1,5 @@
 "Apreta ""alt D"" para ver el diagrama en modo de diseño"
-@startuml
+@startuml name  "Diagrama de Clases"
 
 abstract class Reporte {
    - idReporte: Integer
@@ -59,9 +59,9 @@ class Usuario {
    - idUsuario: Integer
    - premium: Boolean
    - nombre: String
-   - apellido: String
+   - apellidos: String
    - ciudad: Ciudad
-   - mail: String
+   - email: String
    - pass: String
    - puntuacion: Integer
    - seguidos: List<Usuario>
@@ -72,10 +72,11 @@ class Usuario {
 
 class Entrada {
    - idEntrada: Integer
-   - tipoEntrada: String
+   - tipoEntrada: TipoEntrada
    - evento: Evento
    - comprador: Usuario
    - fechaCompra: Date
+   - fechaUso: Date
    - precioPagado: Integer
 }
 

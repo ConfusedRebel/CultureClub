@@ -1,0 +1,31 @@
+package com.cultureclub.cclub.entity;
+
+public enum Ciudad {
+    CABA,
+    LA_PLATA,
+    AVELLANEDA,
+    LANUS,
+    LOMAS_DE_ZAMORA,
+    QUILMES,
+    FLORENCIO_VARELA,
+    BERAZATEGUI,
+    ESTEBAN_ECHEVERRIA,
+    EZEIZA,
+    ALMIRANTE_BROWN,
+    MORON,
+    ITUZAINGO,
+    HURLINGHAM,
+    TRES_DE_FEBRERO,
+    SAN_MARTIN,
+    VICENTE_LOPEZ,
+    SAN_ISIDRO,
+    TIGRE,
+    SAN_FERNANDO,
+    JOSE_C_PA,
+    MORENO,
+    MERLO,
+    MALVINAS_ARGENTINAS,
+    SAN_MIGUEL,
+    PILAR,
+    ESCOBAR
+}
