@@ -1,0 +1,127 @@
+"Apreta ""alt D"" para ver el diagrama en modo de diseño"
+@startuml
+
+abstract class Reporte {
+   - idReporte: Integer
+   - emisor: Usuario
+   - fecha: Date
+   - motivo: String
+   - descripcion: String
+}
+
+
+class ReporteUsuario {
+   - usuarioReportado: Usuario
+}
+
+
+class ReporteError {
+   - urlAfectada: String
+   - severidad: String
+}
+
+
+class ReporteEvento {
+   - eventoReportado: Evento
+}
+
+
+enum ClaseEvento {
+   feria
+   fiesta
+   desfile
+   etc
+}
+
+
+class Evento {
+   - idEvento: Integer
+   - organizador: Usuario
+   - nombre: String
+   - entrada: Boolean
+   - precio: Integer
+   - inicio: Date
+   - fin: Date
+   - seguidores: List<Usuario>
+   - clase: ClaseEvento
+   - calificacion: int
+}
+
+
+class Ciudad {
+   - idCiudad: Integer
+   - nombre: String
+   - eventos: List<Evento>
+}
+
+
+class Usuario {
+   - idUsuario: Integer
+   - premium: Boolean
+   - nombre: String
+   - apellido: String
+   - ciudad: Ciudad
+   - mail: String
+   - pass: String
+   - puntuacion: Integer
+   - seguidos: List<Usuario>
+   - seguidores: List<Usuario>
+   - entradas: List<Entrada>
+}
+
+
+class Entrada {
+   - idEntrada: Integer
+   - tipoEntrada: String
+   - evento: Evento
+   - comprador: Usuario
+   - fechaCompra: Date
+   - precioPagado: Integer
+}
+
+
+class GestorEventos {
+   + filtrarEventos(criterios): List<Evento>
+   + crearEvento(): Evento
+}
+
+
+class GestorUsuarios{
+   + filtrarUsuarios(criterios): List<Usuario>
+   + crearUsuario(); Usuario
+   + verificarUsuario(mail: String, pass: String)
+}
+
+
+enum TipoEntrada {
+   general
+   vip
+   anticipada
+}
+
+
+
+
+
+
+Usuario --> Reporte : emite
+Reporte <|-- ReporteUsuario
+Reporte <|-- ReporteError
+Reporte <|-- ReporteEvento
+ReporteUsuario --> Usuario : reporta
+ReporteEvento --> Evento : reporta
+Usuario "1" --> "0..*" Evento : organiza
+Usuario "0..*" --> "0..*" Evento : sigue
+Usuario "1" --> "0..*" Usuario : sigue
+Evento --> ClaseEvento
+Entrada --> TipoEntrada
+Ciudad "1" --> "0..*" Evento : contiene
+Usuario "1" --> "0..*" Entrada
+Evento "1" --> "1..*" Entrada
+
+
+
+
+@enduml
+
+
