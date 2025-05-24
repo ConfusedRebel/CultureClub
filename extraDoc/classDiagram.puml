@@ -36,7 +36,7 @@ enum ClaseEvento {
 
 class Evento {
    - idEvento: Integer
-   - organizador: Usuario
+   - usuarioOrganizador: Usuario
    - nombre: String
    - entrada: Boolean
    - precio: Integer
@@ -48,7 +48,7 @@ class Evento {
 }
 
 
-class Ciudad {
+enum Ciudad {
    - idCiudad: Integer
    - nombre: String
    - eventos: List<Evento>
@@ -74,7 +74,7 @@ class Entrada {
    - idEntrada: Integer
    - tipoEntrada: TipoEntrada
    - evento: Evento
-   - comprador: Usuario
+   - compradorUsuario: Usuario
    - fechaCompra: Date
    - fechaUso: Date
    - precioPagado: Integer

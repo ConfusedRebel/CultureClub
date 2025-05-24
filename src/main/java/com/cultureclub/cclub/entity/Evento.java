@@ -1,9 +1,9 @@
 package com.cultureclub.cclub.entity;
 
+import java.sql.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
+import jakarta.annotation.Generated;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,47 +14,51 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "usuario")
 @Data
-public class Usuario {
+@Table(name = "evento")
+public class Evento {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idUsuario;
+    private Long idEvento;
 
-    @Column
-    private Boolean premium;
+    @ManyToOne
+    @JoinColumn(name = "organizador_id", nullable = false)
+    private Usuario usuarioOrganizador;
 
     @Column
     private String nombre;
 
     @Column
-    private String apellidos;
-
-    @Enumerated(EnumType.STRING)
-    @Column
-    private Ciudad ciudad;
-
-    @Column(nullable = false, unique = true)
-    private String email;
+    private boolean entrada;
 
     @Column
-    private String pass;
+    private int precio;
 
     @Column
-    private int puntuacion = 0;
+    private Date inicio;
 
-    @ManyToMany // Many usuarios can follow many other usuarios
-    @JoinTable(name = "usuario_seguidos", joinColumns = @JoinColumn(name = "seguidor_id"), inverseJoinColumns = @JoinColumn(name = "seguido_id"))
-    private List<Usuario> seguidos;
+    @Column
+    private Date fin;
 
-    @ManyToMany(mappedBy = "seguidos") // Reverse relationship for followers
+    @ManyToMany
+    @JoinTable(name = "evento_seguidores", joinColumns = @JoinColumn(name = "evento_id"), inverseJoinColumns = @JoinColumn(name = "usuario_id"))
     private List<Usuario> seguidores;
 
-    @OneToMany(mappedBy = "compradorUsuario")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ClaseEvento clase;
+
+    @Column
+    private int clasificacion;
+
+    @OneToMany(mappedBy = "evento")
     private List<Entrada> entradas;
 }
