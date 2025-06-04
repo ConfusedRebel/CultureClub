@@ -41,10 +41,13 @@ public class Usuario {
     private String email;
 
     @Column
-    private String pass;
+    private String password;
 
     @Column
     private int puntuacion = 0;
+
+    @Column
+    private int telefono;
 
     @ManyToMany // Many usuarios can follow many other usuarios
     @JoinTable(name = "usuario_seguidos", joinColumns = @JoinColumn(name = "seguidor_id"), inverseJoinColumns = @JoinColumn(name = "seguido_id"))
@@ -55,4 +58,7 @@ public class Usuario {
 
     @OneToMany(mappedBy = "compradorUsuario")
     private List<Entrada> entradas;
+
+    @OneToMany(mappedBy = "usuarioOrganizador")
+    private List<Evento> eventosOrganizados;
 }
