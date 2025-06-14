@@ -7,6 +7,7 @@ abstract class Reporte {
    - fecha: Date
    - motivo: String
    - descripcion: String
+   
 }
 
 
@@ -67,6 +68,15 @@ class Usuario {
    - seguidos: List<Usuario>
    - seguidores: List<Usuario>
    - entradas: List<Entrada>
+
+   + getAllUsuarios(): List<Usuario>
+   + getPremiumUsuarios(): List<Usuario>
+   + getPremium(id: Integer): Boolean
+   + deleteUsuario(id: Integer): Boolean
+   + loginUsuario(email: String, pass: String): Usuario
+   + getUsuarioById(id: Integer): Usuario
+   + getUsuarioByEmail(email: String): Usuario
+   + getUsuariosByCiudad(ciudad: Ciudad): List<Usuario>
 }
 
 

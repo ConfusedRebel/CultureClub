@@ -18,7 +18,7 @@ public class EventoServiceImpl implements EventoService {
     @Autowired
     private EventoRepository eventoRepository;
     @Autowired
-    private UsuarioService usuarioService;
+    private GestorUsuarioService usuarioService;
 
     @Override
     public Page<Evento> getEventos(int page, int size) {
@@ -26,7 +26,7 @@ public class EventoServiceImpl implements EventoService {
     }
 
     @Override
-    public Evento createEvento(EventoDTO entity) {
+    public Evento createEvento(EventoDTO entity, Long idUsuario) throws Exception {
         List<Evento> eventos = eventoRepository.findByNombre(entity.getNombre());
         if (!eventos.isEmpty()) {
             throw new IllegalArgumentException("Evento con el nombre '" + entity.getNombre() + "' ya existe.");
@@ -39,7 +39,7 @@ public class EventoServiceImpl implements EventoService {
             evento.setFin(entity.getFin());
             evento.setClase(ClaseEvento.valueOf(entity.getClase()));
             // Buscar y asignar el organizador
-            Usuario organizador = usuarioService.getUsuarioById(entity.getIdOrganizador())
+            Usuario organizador = usuarioService.getUsuarioById(idUsuario)
                     .orElseThrow(() -> new IllegalArgumentException("Organizador no encontrado"));
             evento.setUsuarioOrganizador(organizador);
             return eventoRepository.save(evento);

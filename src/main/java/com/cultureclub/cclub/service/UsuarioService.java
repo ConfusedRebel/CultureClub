@@ -1,14 +1,19 @@
 package com.cultureclub.cclub.service;
 
+import com.cultureclub.cclub.entity.dto.UsuarioDTO;
+import com.cultureclub.cclub.entity.dto.reporte.ReporteDTO;
+import com.cultureclub.cclub.entity.reportes.Reporte;
+
 import java.util.Optional;
 
 import com.cultureclub.cclub.entity.Usuario;
-import com.cultureclub.cclub.entity.dto.UsuarioDTO;
-import com.cultureclub.cclub.entity.exceptions.UsuarioDuplicateException;
 
 public interface UsuarioService {
 
-    public Optional<Usuario> getUsuarioById(long id);
+    Optional<Usuario> getUsuarioById(Long id);
 
-    public Usuario createUsuario(UsuarioDTO usuario) throws UsuarioDuplicateException;
+    String updateUsuario(Long id, UsuarioDTO data);
+
+    Optional<Reporte> reportarUsuario(ReporteDTO reporte) throws Exception;
+
 }

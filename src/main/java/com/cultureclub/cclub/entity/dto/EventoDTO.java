@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class EventoDTO {
+    long idEvento;
     long idOrganizador;
     String nombre;
     boolean entrada;

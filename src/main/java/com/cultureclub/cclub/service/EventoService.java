@@ -9,6 +9,6 @@ public interface EventoService {
 
     public Page<Evento> getEventos(int page, int size);
 
-    public Evento createEvento(EventoDTO entity);
+    public Evento createEvento(EventoDTO entity, Long idUsuario) throws Exception;
 
 }

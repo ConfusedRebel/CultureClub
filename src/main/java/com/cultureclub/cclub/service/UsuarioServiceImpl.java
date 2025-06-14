@@ -5,47 +5,37 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cultureclub.cclub.entity.Ciudad;
 import com.cultureclub.cclub.entity.Usuario;
 import com.cultureclub.cclub.entity.dto.UsuarioDTO;
-import com.cultureclub.cclub.entity.exceptions.UsuarioDuplicateException;
+import com.cultureclub.cclub.entity.dto.reporte.ReporteDTO;
+import com.cultureclub.cclub.entity.reportes.Reporte;
+
 import com.cultureclub.cclub.repository.UsuarioRepository;
+import com.mapper.ReporteMapper;
+import com.cultureclub.cclub.repository.ReporteRepository;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private ReporteRepository reporteRepository;
 
     @Override
-    public Optional<Usuario> getUsuarioById(long id) {
-        Optional<Usuario> usuario = usuarioRepository.findById(id);
-        if (usuario.isPresent()) {
-            return usuario;
-        } else {
-            throw new IllegalArgumentException("Usuario no encontrado con ID: " + id);
-        }
+    public Optional<Usuario> getUsuarioById(Long id) {
+        return usuarioRepository.findById(id);
     }
 
     @Override
-    public Usuario createUsuario(UsuarioDTO usuario) throws UsuarioDuplicateException {
-        System.out.println("Creando usuario: " + usuario.getEmail());
-        Optional<Usuario> oldusuario = usuarioRepository.findByEmail(usuario.getEmail());
-        if (oldusuario.isPresent()) {
-            throw new UsuarioDuplicateException("El usuario con el email " + usuario.getEmail() + " ya existe.");
-        } else {
-            Usuario newUsuario = new Usuario();
-            newUsuario.setNombre(usuario.getNombre());
-            newUsuario.setEmail(usuario.getEmail());
-            newUsuario.setPassword(usuario.getPassword());
-            newUsuario.setApellidos(usuario.getApellidos());
-            newUsuario.setCiudad(Ciudad.valueOf(usuario.getCiudad()));
-            newUsuario.setTelefono(usuario.getTelefono());
-            newUsuario.setPremium(usuario.getIsPremium());
+    public String updateUsuario(Long id, UsuarioDTO data) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateUsuario'");
+    }
 
-            return usuarioRepository.save(newUsuario);
-        }
-
+    @Override
+    public Optional<Reporte> reportarUsuario(ReporteDTO reporte) {
+        return reporteRepository.createReporte(ReporteMapper.toEntity(reporte));
     }
 
 }

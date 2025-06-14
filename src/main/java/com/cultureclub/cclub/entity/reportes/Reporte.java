@@ -19,7 +19,7 @@ public abstract class Reporte {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idReporte;
+    private Long idReporte;
 
     @ManyToOne
     @JoinColumn(name = "emisor_id", nullable = false)

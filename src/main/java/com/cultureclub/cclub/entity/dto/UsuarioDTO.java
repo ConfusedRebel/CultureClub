@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class UsuarioDTO {
+    private Long idUsuario;
     private Boolean isPremium;
     private String nombre;
     private String apellidos;
@@ -11,4 +12,5 @@ public class UsuarioDTO {
     private String email;
     private String password;
     private int telefono;
+    private int puntuacion;
 }
