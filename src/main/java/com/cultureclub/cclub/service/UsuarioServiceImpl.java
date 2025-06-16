@@ -21,7 +21,9 @@ import com.mapper.ReporteMapper;
 import jakarta.transaction.Transactional;
 
 import com.cultureclub.cclub.repository.EventoRepository;
-import com.cultureclub.cclub.repository.ReporteRepository;
+import com.cultureclub.cclub.repository.ReporteErrorRepository;
+import com.cultureclub.cclub.repository.ReporteEventoRepository;
+import com.cultureclub.cclub.repository.ReporteUsuarioRepository;
 import com.cultureclub.cclub.repository.EntradaRepository;
 
 @Service
@@ -30,7 +32,13 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
     @Autowired
-    private ReporteRepository reporteRepository;
+    private ReporteErrorRepository reporteErrorRepository;
+
+    @Autowired
+    private ReporteEventoRepository reporteEventoRepository;
+
+    @Autowired
+    private ReporteUsuarioRepository reporteUsuarioRepository;
     @Autowired
     private EventoRepository eventoRepository;
     @Autowired
@@ -67,7 +75,17 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (usuarioEmisor.isEmpty()) {
             throw new IllegalArgumentException("Usuario emisor no encontrado con ID: " + reporte.getIdEmisor());
         }
-        return reporteRepository.save(ReporteMapper.toEntity(reporte, usuarioEmisor.get()));
+        Reporte reporteEntity = ReporteMapper.toEntity(reporte, usuarioEmisor.get());
+
+        if (reporteEntity instanceof com.cultureclub.cclub.entity.reportes.ReporteError error) {
+            return reporteErrorRepository.save(error);
+        } else if (reporteEntity instanceof com.cultureclub.cclub.entity.reportes.ReporteEvento evento) {
+            return reporteEventoRepository.save(evento);
+        } else if (reporteEntity instanceof com.cultureclub.cclub.entity.reportes.ReporteUsuario usuario) {
+            return reporteUsuarioRepository.save(usuario);
+        } else {
+            throw new IllegalArgumentException("Tipo de reporte no soportado");
+        }
     }
 
     @Override
