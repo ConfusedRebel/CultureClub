@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
-    // Find by username (returns a list in case there are multiple matches)
+    // Find by name (returns a list in case there are multiple matches)
     List<Usuario> findByNombre(String nombre);
 
     Optional<Usuario> findByEmail(String email);
