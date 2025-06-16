@@ -21,7 +21,7 @@ public enum Ciudad {
     SAN_ISIDRO,
     TIGRE,
     SAN_FERNANDO,
-    JOSE_C_PA,
+    JOSE_C_PAZ,
     MORENO,
     MERLO,
     MALVINAS_ARGENTINAS,

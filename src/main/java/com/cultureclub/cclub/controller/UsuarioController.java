@@ -77,7 +77,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/{idUsuario}/comprar-entrada")
-    public ResponseEntity<EntradaDTO> comprarEntradaa(@PathVariable Long idUsuario,
+    public ResponseEntity<EntradaDTO> comprarEntrada(@PathVariable Long idUsuario,
             @RequestBody EntradaDTO entradaDTO) {
         Optional<Entrada> entrada = usuarioService.comprarEntrada(idUsuario, entradaDTO);
         EntradaDTO entradaResponse = EntradaMapper.toDTO(entrada.get());
@@ -87,7 +87,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{usuarioId}/seguir/{usuarioSeguidoId}")
-    public String seguirUsuario(@PathVariable Long usuarioId, @RequestBody Long usuarioSeguidoId) {
+    public String seguirUsuario(@PathVariable Long usuarioId, @PathVariable Long usuarioSeguidoId) {
         usuarioService.seguirUsuario(usuarioId, usuarioSeguidoId);
         return "Usuario seguido correctamente";
     }

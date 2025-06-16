@@ -61,7 +61,7 @@ class GestorUsuarioServiceImpl implements GestorUsuarioService {
             return usuario.orElseThrow(
                     () -> new IllegalArgumentException("Usuario no encontrado con ID: " + param.getIdUsuario()));
         }
-        return new IllegalArgumentException("Debe proporcionar un ID o un email para buscar el usuario.");
+        throw new IllegalArgumentException("Debe proporcionar un ID o un email para buscar el usuario.");
     }
 
     @Override
@@ -78,7 +78,7 @@ class GestorUsuarioServiceImpl implements GestorUsuarioService {
         if (usuario.isEmpty()) {
             throw new IllegalArgumentException("Usuario no encontrado con ID: " + param.getIdUsuario());
         }
-        usuarioRepository.deleteById(param.getIdUsuario());
+        usuarioRepository.deleteById(usuario.get().getIdUsuario());
     }
 
     @Override
