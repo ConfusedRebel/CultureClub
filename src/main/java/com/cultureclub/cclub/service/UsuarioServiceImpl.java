@@ -115,10 +115,23 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
         Usuario usuario = usuarioOpt.get();
         Evento evento = eventoOpt.get();
-        Integer calificacionTotalActual = calificacion
-                + (evento.getCalificacion() * evento.getCantidadVisitas());
-        evento.setCantidadVisitas(evento.getCantidadVisitas() + 1);
-        double promedio = (double) calificacionTotalActual / evento.getCantidadVisitas();
+
+        // Initialize values to zero if they are null
+        if (evento.getCalificacion() == null) {
+            evento.setCalificacion(0);
+        }
+        if (evento.getCantidadVisitas() == null) {
+            evento.setCantidadVisitas(0);
+        }
+
+        int visitasActuales = evento.getCantidadVisitas();
+        int calificacionAcumulada = evento.getCalificacion() * visitasActuales;
+        int calificacionTotalActual = calificacion + calificacionAcumulada;
+
+        visitasActuales += 1;
+        double promedio = (double) calificacionTotalActual / visitasActuales;
+
+        evento.setCantidadVisitas(visitasActuales);
         evento.setCalificacion((int) Math.round(promedio));
         eventoRepository.save(evento);
         System.out

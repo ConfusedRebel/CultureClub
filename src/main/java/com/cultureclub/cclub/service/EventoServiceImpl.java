@@ -44,6 +44,13 @@ public class EventoServiceImpl implements EventoService {
             Usuario organizador = usuarioService.getUsuarioById(idUsuario)
                     .orElseThrow(() -> new IllegalArgumentException("Organizador no encontrado"));
             evento.setUsuarioOrganizador(organizador);
+            // Initialize fields that can be null
+            if (evento.getCalificacion() == null) {
+                evento.setCalificacion(0);
+            }
+            if (evento.getCantidadVisitas() == null) {
+                evento.setCantidadVisitas(0);
+            }
             return eventoRepository.save(evento);
         }
     }
