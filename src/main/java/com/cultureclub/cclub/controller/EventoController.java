@@ -47,4 +47,23 @@ public class EventoController {
         }
     }
 
+    @GetMapping("/{idEvento}")
+    public ResponseEntity<EventoDTO> getEventoById(@PathVariable Long idEvento) {
+        Evento evento = eventoService.getEventoById(idEvento);
+        return ResponseEntity.ok(EventoMapper.toDTO(evento));
+    }
+
+    @GetMapping("/clase/{clase}")
+    public ResponseEntity<Page<EventoDTO>> getEventosByClase(
+            @PathVariable String clase,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        if (page >= 0 && size >= 0) {
+            Page<Evento> eventoPage = eventoService.getEventosByClase(clase, page, size);
+            Page<EventoDTO> dtoPage = eventoPage.map(EventoMapper::toDTO);
+            return ResponseEntity.ok(dtoPage);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

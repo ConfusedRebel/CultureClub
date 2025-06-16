@@ -86,18 +86,4 @@ class GestorUsuarioServiceImpl implements GestorUsuarioService {
         return usuarioRepository.findAll();
     }
 
-    @Override
-    public Usuario login(String email, String password) {
-        Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
-        if (usuario.isPresent()) {
-            Usuario foundUser = usuario.get();
-            if (foundUser.getPassword().equals(password)) {
-                return foundUser; // Login successful
-            } else {
-                throw new IllegalArgumentException("Contraseña incorrecta para el usuario: " + email);
-            }
-        } else {
-            throw new IllegalArgumentException("Usuario no encontrado con email: " + email);
-        }
-    }
 }

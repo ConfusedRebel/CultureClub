@@ -20,6 +20,4 @@ public interface GestorUsuarioService {
 
     public Object getAllUsuarios();
 
-    public Usuario login(String email, String password);
-
 }

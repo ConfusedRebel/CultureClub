@@ -6,14 +6,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cultureclub.cclub.entity.Ciudad;
+import com.cultureclub.cclub.entity.Entrada;
+import com.cultureclub.cclub.entity.Evento;
+import com.cultureclub.cclub.entity.TipoEntrada;
 import com.cultureclub.cclub.entity.Usuario;
+import com.cultureclub.cclub.entity.dto.EntradaDTO;
 import com.cultureclub.cclub.entity.dto.UsuarioDTO;
 import com.cultureclub.cclub.entity.dto.reporte.ReporteDTO;
 import com.cultureclub.cclub.entity.reportes.Reporte;
 
 import com.cultureclub.cclub.repository.UsuarioRepository;
 import com.mapper.ReporteMapper;
+
+import jakarta.transaction.Transactional;
+
+import com.cultureclub.cclub.repository.EventoRepository;
 import com.cultureclub.cclub.repository.ReporteRepository;
+import com.cultureclub.cclub.repository.EntradaRepository;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
@@ -22,6 +31,10 @@ public class UsuarioServiceImpl implements UsuarioService {
     private UsuarioRepository usuarioRepository;
     @Autowired
     private ReporteRepository reporteRepository;
+    @Autowired
+    private EventoRepository eventoRepository;
+    @Autowired
+    private EntradaRepository entradaRepository;
 
     @Override
     public Optional<Usuario> getUsuarioById(Long id) {
@@ -57,4 +70,93 @@ public class UsuarioServiceImpl implements UsuarioService {
         return reporteRepository.save(ReporteMapper.toEntity(reporte, usuarioEmisor.get()));
     }
 
+    @Override
+    public Usuario login(String email, String password) {
+        Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
+        if (usuario.isPresent()) {
+            Usuario foundUser = usuario.get();
+            if (foundUser.getPassword().equals(password)) {
+                return foundUser; // Login successful
+            } else {
+                throw new IllegalArgumentException("Contraseña incorrecta para el usuario: " + email);
+            }
+        } else {
+            throw new IllegalArgumentException("Usuario no encontrado con email: " + email);
+        }
+    }
+
+    @Override
+    public void calificarEvento(Long idUsuario, Long idEvento, int calificacion) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(idUsuario);
+        if (usuarioOpt.isEmpty()) {
+            throw new IllegalArgumentException("Usuario no encontrado con ID: " + idUsuario);
+        }
+        Optional<Evento> eventoOpt = eventoRepository.findById(idEvento);
+        if (eventoOpt.isEmpty()) {
+            throw new IllegalArgumentException("Evento no encontrado con ID: " + idEvento);
+        }
+        Usuario usuario = usuarioOpt.get();
+        Evento evento = eventoOpt.get();
+        Integer calificacionTotalActual = calificacion
+                + (evento.getCalificacion() * evento.getCantidadVisitas());
+        evento.setCantidadVisitas(evento.getCantidadVisitas() + 1);
+        double promedio = (double) calificacionTotalActual / evento.getCantidadVisitas();
+        evento.setCalificacion((int) Math.round(promedio));
+        eventoRepository.save(evento);
+        System.out
+                .println("Usuario " + usuario.getNombre() + " calificó el evento " + idEvento + " con " + calificacion);
+    }
+
+    @Override
+    @Transactional
+    public Optional<Entrada> comprarEntrada(Long idUsuario, EntradaDTO entradaDTO) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(idUsuario);
+        if (usuarioOpt.isEmpty()) {
+            throw new IllegalArgumentException("Usuario no encontrado con ID: " + idUsuario);
+        }
+        Usuario usuario = usuarioOpt.get();
+        Optional<Evento> eventoOpt = eventoRepository.findById(entradaDTO.getIdEvento());
+        if (eventoOpt.isEmpty()) {
+            throw new IllegalArgumentException("Evento no encontrado con ID: " + entradaDTO.getIdEvento());
+        }
+        Evento evento = eventoOpt.get();
+
+        Entrada entrada = new Entrada();
+        entrada.setFechaUso(entradaDTO.getFechaUso());
+        entrada.setTipoEntrada(TipoEntrada.valueOf(entradaDTO.getTipoEntrada()));
+        entrada.setCompradorUsuario(usuario);
+        entrada.setEvento(evento);
+        entrada.setPrecioPagado(entradaDTO.getPrecioPagado());
+        entrada.setFechaCompra(entradaDTO.getFechaCompra());
+
+        usuario.getEntradas().add(entrada);
+        evento.getEntradas().add(entrada);
+
+        return Optional.ofNullable(entradaRepository.save(entrada));
+
+    }
+
+    @Override
+    public void seguirUsuario(Long usuarioId, Long usuarioSeguidoId) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
+        if (usuarioOpt.isEmpty()) {
+            throw new IllegalArgumentException("Usuario no encontrado con ID: " + usuarioId);
+        }
+        Optional<Usuario> usuarioSeguidoOpt = usuarioRepository.findById(usuarioSeguidoId);
+        if (usuarioSeguidoOpt.isEmpty()) {
+            throw new IllegalArgumentException("Usuario seguido no encontrado con ID: " + usuarioSeguidoId);
+        }
+        Usuario usuarioSeguido = usuarioSeguidoOpt.get();
+        Usuario usuario = usuarioOpt.get();
+
+        if (!usuario.getSeguidos().contains(usuarioSeguido)) {
+            usuario.getSeguidos().add(usuarioSeguido);
+            usuarioRepository.save(usuario);
+            usuarioSeguido.getSeguidores().add(usuario);
+            usuarioRepository.save(usuarioSeguido);
+            System.out.println("Usuario " + usuario.getNombre() + " ahora sigue a " + usuarioSeguido.getNombre());
+        } else {
+            System.out.println("El usuario " + usuario.getNombre() + " ya sigue a " + usuarioSeguido.getNombre());
+        }
+    }
 }

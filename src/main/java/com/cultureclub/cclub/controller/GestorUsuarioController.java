@@ -51,14 +51,4 @@ public class GestorUsuarioController {
     public ResponseEntity<Object> getAllUsuarios() {
         return ResponseEntity.ok(usuarioService.getAllUsuarios());
     }
-
-    @GetMapping("/login")
-    public ResponseEntity<Object> login(@RequestParam String email, @RequestParam String password) {
-        Usuario usuario = usuarioService.login(email, password);
-        if (usuario != null) {
-            return ResponseEntity.ok(usuario);
-        } else {
-            return ResponseEntity.status(401).body("Invalid credentials");
-        }
-    }
 }

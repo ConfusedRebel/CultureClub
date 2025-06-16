@@ -1,6 +1,8 @@
 package com.cultureclub.cclub.service;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -44,6 +46,30 @@ public class EventoServiceImpl implements EventoService {
             evento.setUsuarioOrganizador(organizador);
             return eventoRepository.save(evento);
         }
+    }
+
+    @Override
+    public Evento getEventoById(Long idEvento) {
+        Optional<Evento> eventoOpt = eventoRepository.findById(idEvento);
+        if (eventoOpt.isPresent()) {
+            return eventoOpt.get();
+        } else {
+            throw new IllegalArgumentException("Evento no encontrado con ID: " + idEvento);
+        }
+    }
+
+    @Override
+    public Page<Evento> getEventosByClase(String clase, int page, int size) {
+        if (page < 0 || size < 0) {
+            throw new IllegalArgumentException("Los parámetros de paginación no pueden ser negativos");
+        }
+        ClaseEvento claseEvento;
+        try {
+            claseEvento = ClaseEvento.valueOf(clase.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Clase de evento no válida: " + clase);
+        }
+        return eventoRepository.findByClase(claseEvento, PageRequest.of(page, size));
     }
 
 }

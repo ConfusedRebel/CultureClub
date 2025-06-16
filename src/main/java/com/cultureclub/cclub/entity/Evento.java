@@ -35,6 +35,9 @@ public class Evento {
     private String nombre;
 
     @Column
+    private String descripcion;
+
+    @Column
     private boolean entrada;
 
     @Column
@@ -45,6 +48,12 @@ public class Evento {
 
     @Column
     private Date fin;
+
+    @Column
+    private Integer calificacion;
+
+    @Column
+    private Integer cantidadVisitas;
 
     @ManyToMany
     @JoinTable(name = "evento_seguidores", joinColumns = @JoinColumn(name = "evento_id"), inverseJoinColumns = @JoinColumn(name = "usuario_id"))
@@ -59,4 +68,5 @@ public class Evento {
 
     @OneToMany(mappedBy = "evento")
     private List<Entrada> entradas;
+
 }

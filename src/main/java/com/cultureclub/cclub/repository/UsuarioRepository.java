@@ -3,6 +3,7 @@ package com.cultureclub.cclub.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.cultureclub.cclub.entity.Entrada;
 import com.cultureclub.cclub.entity.Usuario;
 
 import java.util.List;
@@ -17,6 +18,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByEmail(String email);
 
     Object findByPremium(boolean b);
+
+    Object saveEntrada(Entrada entrada);
 
     // Additional methods can be added as needed
 

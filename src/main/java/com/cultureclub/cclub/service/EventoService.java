@@ -11,4 +11,8 @@ public interface EventoService {
 
     public Evento createEvento(EventoDTO entity, Long idUsuario) throws Exception;
 
+    public Evento getEventoById(Long idEvento);
+
+    public Page<Evento> getEventosByClase(String clase, int page, int size);
+
 }
