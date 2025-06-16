@@ -12,7 +12,7 @@ import com.cultureclub.cclub.entity.exceptions.UsuarioDuplicateException;
 import com.cultureclub.cclub.repository.UsuarioRepository;
 
 @Service
-class GestoruUsuarioServiceImpl implements GestorUsuarioService {
+class GestorUsuarioServiceImpl implements GestorUsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;

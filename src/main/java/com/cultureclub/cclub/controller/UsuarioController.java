@@ -46,13 +46,9 @@ public class UsuarioController {
     public ResponseEntity<ReporteDTO> reportarUsuario(@PathVariable Long id, @RequestBody ReporteDTO reporte)
             throws Exception {
         reporte.setIdEmisor(id);
-        Optional<Reporte> result = usuarioService.reportarUsuario(reporte);
-        if (result.isEmpty()) {
-            throw new Exception("Error al reportar usuario");
-        } else {
-            return ResponseEntity.created(
-                    URI.create("/usuarios/" + id + "/reportes/" + result.get().getIdReporte()))
-                    .body(ReporteMapper.toDTO(result.get()));
-        }
+        Reporte result = usuarioService.reportarUsuario(reporte);
+        return ResponseEntity.created(
+                URI.create("/usuarios/" + id + "/reportes/" + result.getIdReporte()))
+                .body(ReporteMapper.toDTO(result));
     }
 }

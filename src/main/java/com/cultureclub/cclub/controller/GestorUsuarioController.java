@@ -35,6 +35,12 @@ public class GestorUsuarioController {
         return ResponseEntity.ok(usuarioService.getUsuario(param));
     }
 
+    @DeleteMapping("")
+    public ResponseEntity<Object> deleteUsuario(@RequestParam UsuarioDTO param) {
+        usuarioService.deleteUsuario(param);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/premium")
     public ResponseEntity<Object> getPremiumUsuarios(
             @RequestParam(required = false, defaultValue = "false") boolean isPremium) {
@@ -44,12 +50,6 @@ public class GestorUsuarioController {
     @GetMapping("/all")
     public ResponseEntity<Object> getAllUsuarios() {
         return ResponseEntity.ok(usuarioService.getAllUsuarios());
-    }
-
-    @DeleteMapping("")
-    public ResponseEntity<Object> deleteUsuario(@RequestParam UsuarioDTO param) {
-        usuarioService.deleteUsuario(param);
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/login")

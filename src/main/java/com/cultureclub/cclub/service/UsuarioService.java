@@ -14,6 +14,6 @@ public interface UsuarioService {
 
     String updateUsuario(Long id, UsuarioDTO data);
 
-    Optional<Reporte> reportarUsuario(ReporteDTO reporte) throws Exception;
+    Reporte reportarUsuario(ReporteDTO reporte) throws Exception;
 
 }

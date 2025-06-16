@@ -1,5 +1,6 @@
 package com.mapper;
 
+import com.cultureclub.cclub.entity.Usuario;
 import com.cultureclub.cclub.entity.dto.reporte.ReporteDTO;
 import com.cultureclub.cclub.entity.dto.reporte.ReporteErrorDTO;
 import com.cultureclub.cclub.entity.dto.reporte.ReporteEventoDTO;
@@ -43,33 +44,31 @@ public class ReporteMapper {
         dto.setDescripcion(reporte.getDescripcion());
     }
 
-    public static Reporte toEntity(ReporteDTO dto) {
+    public static Reporte toEntity(ReporteDTO dto, Usuario emisor) {
+        Reporte reporte;
         if (dto instanceof ReporteErrorDTO errorDto) {
-            ReporteError reporte = new ReporteError();
-            reporte.setUrlAfectada(errorDto.getUrlAfectada());
-            reporte.setSeveridad(errorDto.getSeveridad());
-            setBaseFieldsInEntity(dto, reporte);
-            return reporte;
+            ReporteError r = new ReporteError();
+            r.setUrlAfectada(errorDto.getUrlAfectada());
+            r.setSeveridad(errorDto.getSeveridad());
+            reporte = r;
         } else if (dto instanceof ReporteUsuarioDTO usuarioDto) {
-            ReporteUsuario reporte = new ReporteUsuario();
-            // Create a UsuarioDTO with the id before mapping to entity
+            ReporteUsuario r = new ReporteUsuario();
             com.cultureclub.cclub.entity.dto.UsuarioDTO usuarioDtoTemp = new com.cultureclub.cclub.entity.dto.UsuarioDTO();
             usuarioDtoTemp.setIdUsuario(usuarioDto.getIdUsuarioReportado());
-            reporte.setUsuarioReportado(UsuarioMapper.toEntity(usuarioDtoTemp));
-            setBaseFieldsInEntity(dto, reporte);
-            return reporte;
+            r.setUsuarioReportado(UsuarioMapper.toEntity(usuarioDtoTemp));
+            reporte = r;
         } else if (dto instanceof ReporteEventoDTO eventoDto) {
-            ReporteEvento reporte = new ReporteEvento();
-            // Assuming EventoMapper is available to convert event ID to Evento entity
+            ReporteEvento r = new ReporteEvento();
             com.cultureclub.cclub.entity.dto.EventoDTO eventoDtoTemp = new com.cultureclub.cclub.entity.dto.EventoDTO();
             eventoDtoTemp.setIdEvento(eventoDto.getIdEventoReportado());
-            // Provide a Usuario object as the second argument (replace 'null' with the
-            // appropriate Usuario if available)
-            reporte.setEventoReportado(EventoMapper.toEntity(eventoDtoTemp, null));
-            setBaseFieldsInEntity(dto, reporte);
-            return reporte;
+            r.setEventoReportado(EventoMapper.toEntity(eventoDtoTemp, null));
+            reporte = r;
+        } else {
+            throw new IllegalArgumentException("Unsupported ReporteDTO type: " + dto.getClass().getName());
         }
-        throw new IllegalArgumentException("Unsupported ReporteDTO type: " + dto.getClass().getName());
+        setBaseFieldsInEntity(dto, reporte);
+        reporte.setUsuarioEmisor(emisor); // <-- Set the emisor here!
+        return reporte;
     }
 
     private static void setBaseFieldsInEntity(ReporteDTO dto, Reporte reporte) {

@@ -11,6 +11,6 @@ public class UsuarioDTO {
     private String ciudad;
     private String email;
     private String password;
-    private int telefono;
-    private int puntuacion;
+    private Integer telefono;
+    private Integer puntuacion;
 }

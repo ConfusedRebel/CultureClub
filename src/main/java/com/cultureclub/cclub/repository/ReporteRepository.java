@@ -9,6 +9,4 @@ import com.cultureclub.cclub.entity.reportes.Reporte;
 
 @Repository
 public interface ReporteRepository extends JpaRepository<Reporte, Long> {
-
-    Optional<Reporte> createReporte(Reporte reporte);
 }
