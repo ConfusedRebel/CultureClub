@@ -1,1231 +1,1807 @@
 {
-  "info": {
-    "name": "CultureClub API Tests",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "item": [
-    {
-      "name": "UsuarioController",
-      "item": [
-        {
-          "name": "getUsuarioById valid",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/usuarios/1"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Has nombre', () => pm.expect(pm.response.json()).to.have.property('nombre'));",
-                  "pm.test('Has idUsuario', () => pm.expect(pm.response.json().idUsuario).to.eql(1));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "getUsuarioById not found",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/usuarios/999"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 404', () => pm.response.to.have.status(404));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "getUsuarioById invalid",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/usuarios/abc"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "putUsuarioById valid",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/usuarios/1",
-            "body": {
-              "mode": "raw",
-              "raw": "{\"nombre\": \"Nuevo\"}"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Respuesta texto', () => pm.expect(pm.response.text()).to.include('actualizado'));",
-                  "pm.test('Not empty', () => pm.expect(pm.response.text()).to.not.be.empty);"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "putUsuarioById not found",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/usuarios/999",
-            "body": {
-              "mode": "raw",
-              "raw": "{\"nombre\": \"Nuevo\"}"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 404 or 400', () => pm.expect([404,400]).to.include(pm.response.code));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "putUsuarioById invalid body",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/usuarios/1",
-            "body": {
-              "mode": "raw",
-              "raw": "{}"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "reportarUsuario valid",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/usuarios/1/reportar",
-            "body": {
-              "mode": "raw",
-              "raw": "{\"tipo\": \"usuario\", \"motivo\": \"spam\", \"descripcion\": \"desc\", \"fecha\": \"2024-01-01\", \"idUsuarioReportado\": 2}"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
-                  "pm.test('Has idReporte', () => pm.expect(pm.response.json()).to.have.property('idReporte'));",
-                  "pm.test('Location header', () => pm.response.to.have.header('location'));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "reportarUsuario user not found",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/usuarios/999/reportar",
-            "body": {
-              "mode": "raw",
-              "raw": "{\"tipo\": \"usuario\", \"motivo\": \"spam\"}"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 400 or 404', () => pm.expect([400,404]).to.include(pm.response.code));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "reportarUsuario invalid body",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/usuarios/1/reportar",
-            "body": {
-              "mode": "raw",
-              "raw": "{}"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "login success",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/usuarios/login?email={{email}}&password={{password}}"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Has idUsuario', () => pm.expect(pm.response.json()).to.have.property('idUsuario'));",
-                  "pm.test('Contains email', () => pm.expect(pm.response.json().email).to.eql(pm.variables.get('email')));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "login wrong password",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/usuarios/login?email={{email}}&password=wrong"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "login user not found",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/usuarios/login?email=nouser@test.com&password=p"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "calificarEvento ok",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/usuarios/1/1/calificar",
-            "body": {
-              "mode": "raw",
-              "raw": "5"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Mensaje correcto', () => pm.expect(pm.response.text()).to.include('correctamente'));",
-                  "pm.test('No JSON', () => pm.response.to.not.be.json);"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "calificarEvento calificacion baja",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/usuarios/1/1/calificar",
-            "body": {
-              "mode": "raw",
-              "raw": "0"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "calificarEvento calificacion alta",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/usuarios/1/1/calificar",
-            "body": {
-              "mode": "raw",
-              "raw": "6"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "comprarEntrada ok",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/usuarios/1/comprar-entrada",
-            "body": {
-              "mode": "raw",
-              "raw": "{\"tipoEntrada\": \"GENERAL\", \"idEvento\": 1, \"idCompradorUsuario\": 1, \"fechaCompra\": \"2024-01-01\", \"fechaUso\": \"2024-01-02\", \"precioPagado\": 10}"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
-                  "pm.test('Tiene idEntrada', () => pm.expect(pm.response.json()).to.have.property('idEntrada'));",
-                  "pm.test('Location header', () => pm.response.to.have.header('location'));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "comprarEntrada usuario no existe",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/usuarios/999/comprar-entrada",
-            "body": {
-              "mode": "raw",
-              "raw": "{}"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 400 or 404', () => pm.expect([400,404]).to.include(pm.response.code));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "comprarEntrada evento no existe",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/usuarios/1/comprar-entrada",
-            "body": {
-              "mode": "raw",
-              "raw": "{\"tipoEntrada\": \"GENERAL\", \"idEvento\": 999, \"idCompradorUsuario\": 1, \"fechaCompra\": \"2024-01-01\", \"fechaUso\": \"2024-01-02\", \"precioPagado\": 10}"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 400 or 404', () => pm.expect([400,404]).to.include(pm.response.code));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "seguirUsuario ok",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/usuarios/1/seguir/2"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Mensaje', () => pm.expect(pm.response.text()).to.include('correctamente'));",
-                  "pm.test('No JSON', () => pm.response.to.not.be.json);"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "seguirUsuario ya seguido",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/usuarios/1/seguir/2"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "seguirUsuario usuario no existe",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/usuarios/999/seguir/2"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 400 or 404', () => pm.expect([400,404]).to.include(pm.response.code));"
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "EventoController",
-      "item": [
-        {
-          "name": "publicarEvento ok",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/eventos/1",
-            "body": {
-              "mode": "raw",
-              "raw": "{\"nombre\": \"Evento\", \"descripcion\": \"Desc\", \"entrada\": true, \"precio\": 10, \"inicio\": \"2024-01-01\", \"fin\": \"2024-01-02\", \"clase\": \"MUSICA\"}"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
-                  "pm.test('Tiene idEvento', () => pm.expect(pm.response.json()).to.have.property('idEvento'));",
-                  "pm.test('Location header', () => pm.response.to.have.header('location'));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "publicarEvento usuario no existe",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/eventos/999",
-            "body": {
-              "mode": "raw",
-              "raw": "{}"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 400 or 404', () => pm.expect([400,404]).to.include(pm.response.code));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "publicarEvento body invalido",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/eventos/1",
-            "body": {
-              "mode": "raw",
-              "raw": "{}"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "getEventos ok",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/eventos?page=0&size=10"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Es pagina', () => pm.expect(pm.response.json()).to.have.property('content'));",
-                  "pm.test('Tiene size 10', () => pm.expect(pm.response.json().size).to.eql(10));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "getEventos pagina negativa",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/eventos?page=-1&size=10"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "getEventos size negativo",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/eventos?page=0&size=-10"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "getEventoById ok",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/eventos/1"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Tiene idEvento', () => pm.expect(pm.response.json()).to.have.property('idEvento'));",
-                  "pm.test('Nombre presente', () => pm.expect(pm.response.json()).to.have.property('nombre'));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "getEventoById no existe",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/eventos/999"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 404', () => pm.response.to.have.status(404));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "getEventoById id invalido",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/eventos/abc"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "getEventosByClase ok",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/eventos/clase/MUSICA?page=0&size=10"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Es pagina', () => pm.expect(pm.response.json()).to.have.property('content'));",
-                  "pm.test('Tiene size 10', () => pm.expect(pm.response.json().size).to.eql(10));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "getEventosByClase pagina negativa",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/eventos/clase/MUSICA?page=-1&size=10"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "getEventosByClase size negativo",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/eventos/clase/MUSICA?page=0&size=-10"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "GestorUsuarioController",
-      "item": [
-        {
-          "name": "createUsuario ok",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/gestorUsuarios",
-            "body": {
-              "mode": "raw",
-              "raw": "{\"nombre\": \"Juan\", \"apellidos\": \"Perez\", \"ciudad\": \"MADRID\", \"email\": \"juan@test.com\", \"password\": \"pass\", \"telefono\": 123, \"isPremium\": false}"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
-                  "pm.test('Tiene idUsuario', () => pm.expect(pm.response.json()).to.have.property('idUsuario'));",
-                  "pm.test('Location header', () => pm.response.to.have.header('location'));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "createUsuario duplicado",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/gestorUsuarios",
-            "body": {
-              "mode": "raw",
-              "raw": "{\"nombre\": \"Juan\", \"apellidos\": \"Perez\", \"ciudad\": \"MADRID\", \"email\": \"juan@test.com\", \"password\": \"pass\", \"telefono\": 123, \"isPremium\": false}"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 409', () => pm.expect([409,400]).to.include(pm.response.code));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "createUsuario body invalido",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/gestorUsuarios",
-            "body": {
-              "mode": "raw",
-              "raw": "{}"
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "getUsuario por id",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/gestorUsuarios?idUsuario=1"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Tiene idUsuario', () => pm.expect(pm.response.json()).to.have.property('idUsuario'));",
-                  "pm.test('Nombre presente', () => pm.expect(pm.response.json()).to.have.property('nombre'));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "getUsuario por email",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/gestorUsuarios?email={{email}}"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "getUsuario sin parametros",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/gestorUsuarios"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "deleteUsuario por id",
-          "request": {
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/gestorUsuarios?idUsuario=1"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 204', () => pm.response.to.have.status(204));",
-                  "pm.test('Sin contenido', () => pm.expect(pm.response.text()).to.eql(''));",
-                  "pm.test('No body', () => pm.response.to.not.be.json);"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "deleteUsuario por email",
-          "request": {
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/gestorUsuarios?email={{email}}"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 204', () => pm.response.to.have.status(204));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "deleteUsuario no existe",
-          "request": {
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/gestorUsuarios?idUsuario=999"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 404 or 400', () => pm.expect([404,400]).to.include(pm.response.code));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "getPremiumUsuarios true",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/gestorUsuarios/premium?isPremium=true"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Es array', () => pm.expect(Array.isArray(pm.response.json())).to.be.true);",
-                  "pm.test('Usuarios premium', () => pm.expect(pm.response.json().every(u => u.premium)).to.be.true);"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "getPremiumUsuarios false",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/gestorUsuarios/premium?isPremium=false"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "getPremiumUsuarios sin parametro",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/gestorUsuarios/premium"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "getAllUsuarios",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{base_url}}/gestorUsuarios/all"
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Es array', () => pm.expect(Array.isArray(pm.response.json())).to.be.true);",
-                  "pm.test('Primer elemento tiene idUsuario', () => { if(pm.response.json().length>0){pm.expect(pm.response.json()[0]).to.have.property('idUsuario');} });"
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    }
-  ]
+	"info": {
+		"_postman_id": "aff04278-0dd1-40b8-a8e7-3b47a9db854b",
+		"name": "CultureClub API Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37900394"
+	},
+	"item": [
+		{
+			"name": "UsuarioController",
+			"item": [
+				{
+					"name": "getUsuarioById valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Has nombre', () => pm.expect(pm.response.json()).to.have.property('nombre'));",
+									"pm.test('Has idUsuario', () => pm.expect(pm.response.json().idUsuario).to.eql(1));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/usuarios/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUsuarioById not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 404', () => pm.response.to.have.status(404));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/usuarios/999",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUsuarioById invalid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 400', () => pm.response.to.have.status(400));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/usuarios/abc",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"abc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "putUsuarioById valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Respuesta texto', () => pm.expect(pm.response.text()).to.include('actualizado'));",
+									"pm.test('Not empty', () => pm.expect(pm.response.text()).to.not.be.empty);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"nombre\": \"Nuevo\"}"
+						},
+						"url": {
+							"raw": "{{base_url}}/usuarios/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "putUsuarioById not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 404 or 400', () => pm.expect([404,400]).to.include(pm.response.code));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"nombre\": \"Nuevo\"}"
+						},
+						"url": {
+							"raw": "{{base_url}}/usuarios/999",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "putUsuarioById invalid body",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 400', () => pm.response.to.have.status(400));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{base_url}}/usuarios/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reportarUsuario valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 201', () => pm.response.to.have.status(201));",
+									"pm.test('Has idReporte', () => pm.expect(pm.response.json()).to.have.property('idReporte'));",
+									"pm.test('Location header', () => pm.response.to.have.header('location'));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"tipo\": \"usuario\",\r\n    \"motivo\": \"spam\",\r\n    \"descripcion\": \"desc\",\r\n    \"fecha\": \"2024-01-01\",\r\n    \"idUsuarioReportado\": 2\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/usuarios/1/reportar",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"1",
+								"reportar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reportarUsuario user not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 400 or 404', () => pm.expect([400,404]).to.include(pm.response.code));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"tipo\": \"usuario\", \"motivo\": \"spam\"}"
+						},
+						"url": {
+							"raw": "{{base_url}}/usuarios/999/reportar",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"999",
+								"reportar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reportarUsuario invalid body",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 400', () => pm.response.to.have.status(400));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{base_url}}/usuarios/1/reportar",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"1",
+								"reportar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Has idUsuario', () => pm.expect(pm.response.json()).to.have.property('idUsuario'));",
+									"pm.test('Contains email', () => pm.expect(pm.response.json().email).to.eql(pm.variables.get('email')));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"juan@test.com\",\r\n    \"password\": \"pass\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/usuarios/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login wrong password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 401', () => pm.response.to.have.status(401));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"juan@test.com\",\r\n    \"password\": \"pas\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/usuarios/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login user not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 401', () => pm.response.to.have.status(401));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"juan@tesdast.com\",\r\n    \"password\": \"pass\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/usuarios/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "calificarEvento ok",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Mensaje correcto', () => pm.expect(pm.response.text()).to.include('correctamente'));",
+									"pm.test('No JSON', () => pm.response.to.not.be.json);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"calificacion\" : \"5\"\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/usuarios/3/calificar/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"3",
+								"calificar",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "comprarEntrada ok",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 201', () => pm.response.to.have.status(201));",
+									"pm.test('Tiene idEntrada', () => pm.expect(pm.response.json()).to.have.property('idEntrada'));",
+									"pm.test('Location header', () => pm.response.to.have.header('location'));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"tipoEntrada\": \"GENERAL\", \"idEvento\": 1, \"idCompradorUsuario\": 1, \"fechaCompra\": \"2024-01-01\", \"fechaUso\": \"2024-01-02\", \"precioPagado\": 10}"
+						},
+						"url": {
+							"raw": "{{base_url}}/usuarios/1/comprar-entrada",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"1",
+								"comprar-entrada"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "comprarEntrada usuario no existe",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 400 or 404', () => pm.expect([400,404]).to.include(pm.response.code));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{base_url}}/usuarios/999/comprar-entrada",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"999",
+								"comprar-entrada"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "comprarEntrada evento no existe",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 400 or 404', () => pm.expect([400,404]).to.include(pm.response.code));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"tipoEntrada\": \"GENERAL\", \"idEvento\": 999, \"idCompradorUsuario\": 1, \"fechaCompra\": \"2024-01-01\", \"fechaUso\": \"2024-01-02\", \"precioPagado\": 10}"
+						},
+						"url": {
+							"raw": "{{base_url}}/usuarios/1/comprar-entrada",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"1",
+								"comprar-entrada"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "seguirUsuario ok",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Mensaje', () => pm.expect(pm.response.text()).to.include('correctamente'));",
+									"pm.test('No JSON', () => pm.response.to.not.be.json);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/usuarios/1/seguir/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"1",
+								"seguir",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "seguirUsuario ya seguido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/usuarios/1/seguir/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"1",
+								"seguir",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "seguirUsuario usuario no existe",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 400 or 404', () => pm.expect([400,404]).to.include(pm.response.code));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/usuarios/999/seguir/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"999",
+								"seguir",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "EventoController",
+			"item": [
+				{
+					"name": "publicarEvento ok",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 201', () => pm.response.to.have.status(201));",
+									"pm.test('Tiene idEvento', () => pm.expect(pm.response.json()).to.have.property('idEvento'));",
+									"pm.test('Location header', () => pm.response.to.have.header('location'));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Evento\",\r\n    \"descripcion\": \"Desc\",\r\n    \"entrada\": true,\r\n    \"precio\": 10,\r\n    \"inicio\": \"2024-01-01\",\r\n    \"fin\": \"2024-01-02\",\r\n    \"clase\": \"mercadillo\"\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/eventos/3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"eventos",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "publicarEvento usuario no existe",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 400 or 404', () => pm.expect([400,404]).to.include(pm.response.code));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{base_url}}/eventos/999",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"eventos",
+								"999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "publicarEvento body invalido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 400', () => pm.response.to.have.status(400));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{base_url}}/eventos/3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"eventos",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getEventos ok",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Es pagina', () => pm.expect(pm.response.json()).to.have.property('content'));",
+									"pm.test('Tiene size 10', () => pm.expect(pm.response.json().size).to.eql(10));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/eventos?page=0&size=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"eventos"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getEventos pagina negativa",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 400', () => pm.response.to.have.status(400));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/eventos?page=-1&size=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"eventos"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "-1"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getEventos size negativo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 400', () => pm.response.to.have.status(400));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/eventos?page=0&size=-10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"eventos"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "-10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getEventoById ok",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Tiene idEvento', () => pm.expect(pm.response.json()).to.have.property('idEvento'));",
+									"pm.test('Nombre presente', () => pm.expect(pm.response.json()).to.have.property('nombre'));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/eventos/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"eventos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getEventoById no existe",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 404', () => pm.response.to.have.status(404));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/eventos/999",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"eventos",
+								"999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getEventoById id invalido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 400', () => pm.response.to.have.status(400));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/eventos/abc",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"eventos",
+								"abc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getEventosByClase ok",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Es pagina', () => pm.expect(pm.response.json()).to.have.property('content'));",
+									"pm.test('Tiene size 10', () => pm.expect(pm.response.json().size).to.eql(10));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/eventos/clase/mercadillo?page=0&size=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"eventos",
+								"clase",
+								"mercadillo"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getEventosByClase pagina negativa",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 400', () => pm.response.to.have.status(400));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/eventos/clase/MUSICA?page=-1&size=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"eventos",
+								"clase",
+								"MUSICA"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "-1"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getEventosByClase size negativo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 400', () => pm.response.to.have.status(400));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/eventos/clase/MUSICA?page=0&size=-10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"eventos",
+								"clase",
+								"MUSICA"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "-10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GestorUsuarioController",
+			"item": [
+				{
+					"name": "createUsuario ok",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 201', () => pm.response.to.have.status(201));",
+									"pm.test('Tiene idUsuario', () => pm.expect(pm.response.json()).to.have.property('idUsuario'));",
+									"pm.test('Location header', () => pm.response.to.have.header('location'));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Juan\",\r\n    \"apellidos\": \"Perez\",\r\n    \"ciudad\": \"EZEIZA\",\r\n    \"email\": \"juan@test.com\",\r\n    \"password\": \"pass\",\r\n    \"telefono\": 123,\r\n    \"isPremium\": false\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/gestorUsuarios",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"gestorUsuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createUsuario duplicado",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 409', () => pm.expect([409,400]).to.include(pm.response.code));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Juan\",\r\n    \"apellidos\": \"Perez\",\r\n    \"ciudad\": \"MADRID\",\r\n    \"email\": \"juan@test.com\",\r\n    \"password\": \"pass\",\r\n    \"telefono\": 123,\r\n    \"isPremium\": false\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/gestorUsuarios",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"gestorUsuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createUsuario body invalido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 400', () => pm.response.to.have.status(400));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{base_url}}/gestorUsuarios",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"gestorUsuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUsuario por id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Tiene idUsuario', () => pm.expect(pm.response.json()).to.have.property('idUsuario'));",
+									"pm.test('Nombre presente', () => pm.expect(pm.response.json()).to.have.property('nombre'));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idUsuario\":\"2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/gestorUsuarios",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"gestorUsuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUsuario por email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"juan@test.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/gestorUsuarios",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"gestorUsuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUsuario sin parametros",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 400', () => pm.response.to.have.status(400));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/gestorUsuarios",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"gestorUsuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteUsuario por id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 204', () => pm.response.to.have.status(204));",
+									"pm.test('Sin contenido', () => pm.expect(pm.response.text()).to.eql(''));",
+									"pm.test('No body', () => pm.response.to.not.be.json);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idUsuario\": \"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/gestorUsuarios",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"gestorUsuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteUsuario por email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 204', () => pm.response.to.have.status(204));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"juan@test.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/gestorUsuarios",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"gestorUsuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteUsuario no existe",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 404 or 400', () => pm.expect([404,400]).to.include(pm.response.code));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/gestorUsuarios?idUsuario=999",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"gestorUsuarios"
+							],
+							"query": [
+								{
+									"key": "idUsuario",
+									"value": "999"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getPremiumUsuarios true",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Es array', () => pm.expect(Array.isArray(pm.response.json())).to.be.true);",
+									"pm.test('Usuarios premium', () => pm.expect(pm.response.json().every(u => u.premium)).to.be.true);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/gestorUsuarios/premium?isPremium=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"gestorUsuarios",
+								"premium"
+							],
+							"query": [
+								{
+									"key": "isPremium",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getPremiumUsuarios false",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/gestorUsuarios/premium?isPremium=false",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"gestorUsuarios",
+								"premium"
+							],
+							"query": [
+								{
+									"key": "isPremium",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getPremiumUsuarios sin parametro",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/gestorUsuarios/premium",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"gestorUsuarios",
+								"premium"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllUsuarios",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Es array', () => pm.expect(Array.isArray(pm.response.json())).to.be.true);",
+									"pm.test('Primer elemento tiene idUsuario', () => { if(pm.response.json().length>0){pm.expect(pm.response.json()[0]).to.have.property('idUsuario');} });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/gestorUsuarios/all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"gestorUsuarios",
+								"all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
 }
