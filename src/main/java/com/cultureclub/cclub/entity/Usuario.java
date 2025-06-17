@@ -2,7 +2,6 @@ package com.cultureclub.cclub.entity;
 
 import java.util.List;
 
-import com.cultureclub.cclub.entity.reportes.Reporte;
 import com.cultureclub.cclub.entity.reportes.ReporteError;
 import com.cultureclub.cclub.entity.reportes.ReporteEvento;
 import com.cultureclub.cclub.entity.reportes.ReporteUsuario;
