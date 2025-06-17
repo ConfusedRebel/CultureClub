@@ -13,10 +13,10 @@ import com.cultureclub.cclub.entity.dto.EntradaDTO;
 import com.cultureclub.cclub.entity.dto.UsuarioDTO;
 import com.cultureclub.cclub.entity.dto.reporte.ReporteDTO;
 import com.cultureclub.cclub.entity.reportes.Reporte;
-import com.cultureclub.cclub.service.UsuarioService;
-import com.mapper.EntradaMapper;
-import com.mapper.ReporteMapper;
-import com.mapper.UsuarioMapper;
+import com.cultureclub.cclub.mapper.EntradaMapper;
+import com.cultureclub.cclub.mapper.ReporteMapper;
+import com.cultureclub.cclub.mapper.UsuarioMapper;
+import com.cultureclub.cclub.service.Int.UsuarioService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,17 +54,6 @@ public class UsuarioController {
         return ResponseEntity.created(
                 URI.create("/usuarios/" + id + "/reportes/" + result.getIdReporte()))
                 .body(ReporteMapper.toDTO(result));
-    }
-
-    @GetMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody UsuarioDTO usuarioDTO) {
-        Usuario usuario = usuarioService.login(usuarioDTO.getEmail(), usuarioDTO.getPassword());
-        if (usuario != null) {
-            UsuarioDTO response = UsuarioMapper.toDTO(usuario);
-            return ResponseEntity.ok(response);
-        } else {
-            return ResponseEntity.status(401).body("Invalid credentials");
-        }
     }
 
     @PostMapping("{idUsuario}/calificar/{idEvento}")

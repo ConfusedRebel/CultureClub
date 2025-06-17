@@ -1,4 +1,4 @@
-package com.mapper;
+package com.cultureclub.cclub.mapper;
 
 import com.cultureclub.cclub.entity.Usuario;
 import com.cultureclub.cclub.entity.dto.reporte.ReporteDTO;

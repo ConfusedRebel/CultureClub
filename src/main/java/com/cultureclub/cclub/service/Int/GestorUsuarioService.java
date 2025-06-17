@@ -1,20 +1,19 @@
-package com.cultureclub.cclub.service;
+package com.cultureclub.cclub.service.Int;
 
 import java.util.Optional;
 
 import com.cultureclub.cclub.entity.Usuario;
 import com.cultureclub.cclub.entity.dto.UsuarioDTO;
-import com.cultureclub.cclub.entity.exceptions.UsuarioDuplicateException;
 
 public interface GestorUsuarioService {
 
     public Optional<Usuario> getUsuarioById(long id);
 
-    public Usuario createUsuario(UsuarioDTO usuario) throws UsuarioDuplicateException;
-
     public Object getUsuario(UsuarioDTO param);
 
     public Object getPremiumUsuarios(boolean isPremium);
+
+    public Object getAdminUsuarios(boolean isAdmin);
 
     public void deleteUsuario(UsuarioDTO param);
 

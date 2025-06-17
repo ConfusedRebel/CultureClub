@@ -1,21 +1,22 @@
-package com.cultureclub.cclub.service;
+package com.cultureclub.cclub.service.Impl;
 
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cultureclub.cclub.entity.Ciudad;
 import com.cultureclub.cclub.entity.Usuario;
 import com.cultureclub.cclub.entity.dto.UsuarioDTO;
-import com.cultureclub.cclub.entity.exceptions.UsuarioDuplicateException;
+import com.cultureclub.cclub.entity.enumeradores.Rol;
 import com.cultureclub.cclub.repository.UsuarioRepository;
+import com.cultureclub.cclub.service.Int.GestorUsuarioService;
 
 @Service
 class GestorUsuarioServiceImpl implements GestorUsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
 
     @Override
     public Optional<Usuario> getUsuarioById(long id) {
@@ -25,27 +26,6 @@ class GestorUsuarioServiceImpl implements GestorUsuarioService {
         } else {
             throw new IllegalArgumentException("Usuario no encontrado con ID: " + id);
         }
-    }
-
-    @Override
-    public Usuario createUsuario(UsuarioDTO usuario) throws UsuarioDuplicateException {
-        System.out.println("Creando usuario: " + usuario.getEmail());
-        Optional<Usuario> oldusuario = usuarioRepository.findByEmail(usuario.getEmail());
-        if (oldusuario.isPresent()) {
-            throw new UsuarioDuplicateException("El usuario con el email " + usuario.getEmail() + " ya existe.");
-        } else {
-            Usuario newUsuario = new Usuario();
-            newUsuario.setNombre(usuario.getNombre());
-            newUsuario.setEmail(usuario.getEmail());
-            newUsuario.setPassword(usuario.getPassword());
-            newUsuario.setApellidos(usuario.getApellidos());
-            newUsuario.setCiudad(Ciudad.valueOf(usuario.getCiudad()));
-            newUsuario.setTelefono(usuario.getTelefono());
-            newUsuario.setPremium(usuario.getIsPremium());
-
-            return usuarioRepository.save(newUsuario);
-        }
-
     }
 
     @Override
@@ -66,7 +46,26 @@ class GestorUsuarioServiceImpl implements GestorUsuarioService {
 
     @Override
     public Object getPremiumUsuarios(boolean isPremium) {
-        return usuarioRepository.findByPremium(isPremium);
+        if (isPremium) {
+            System.out.println("Obteniendo usuarios premium");
+            return usuarioRepository.findByRolesContaining(Rol.PREMIUM);
+        } else {
+            System.out.println("Obteniendo usuarios no premium");
+            return usuarioRepository.findByRolesNotContaining(Rol.PREMIUM);
+        }
+
+    }
+
+    @Override
+    public Object getAdminUsuarios(boolean isAdmin) {
+        if (isAdmin) {
+            System.out.println("Obteniendo usuarios administradores");
+            return usuarioRepository.findByRolesContaining(Rol.ADMINISTRADOR);
+        } else {
+            System.out.println("Obteniendo usuarios no administradores");
+            return usuarioRepository.findByRolesNotContaining(Rol.ADMINISTRADOR);
+        }
+
     }
 
     @Override

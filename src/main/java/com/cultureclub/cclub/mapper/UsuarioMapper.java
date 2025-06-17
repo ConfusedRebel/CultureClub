@@ -1,4 +1,4 @@
-package com.mapper;
+package com.cultureclub.cclub.mapper;
 
 import com.cultureclub.cclub.entity.Ciudad;
 import com.cultureclub.cclub.entity.Usuario;
@@ -15,6 +15,7 @@ public class UsuarioMapper {
         dto.setEmail(usuario.getEmail());
         dto.setPuntuacion(usuario.getPuntuacion());
         dto.setTelefono(usuario.getTelefono());
+        dto.setRoles(dto.getRoles());
         return dto;
     }
 
@@ -32,7 +33,7 @@ public class UsuarioMapper {
         usuario.setTelefono(dto.getTelefono());
         // Set other fields as needed (e.g., password, premium)
         usuario.setPassword(dto.getPassword());
-        usuario.setPremium(dto.getIsPremium());
+        usuario.setRoles(dto.getRoles() != dto.getRoles() ? dto.getRoles() : usuario.getRoles());
         return usuario;
     }
 }

@@ -3,6 +3,8 @@ package com.cultureclub.cclub.entity;
 import java.sql.Date;
 import java.util.List;
 
+import com.cultureclub.cclub.entity.enumeradores.ClaseEvento;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

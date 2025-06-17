@@ -1,4 +1,4 @@
-package com.mapper;
+package com.cultureclub.cclub.mapper;
 
 import com.cultureclub.cclub.entity.Evento;
 import com.cultureclub.cclub.entity.dto.EventoDTO;
@@ -28,7 +28,7 @@ public class EventoMapper {
         evento.setInicio(dto.getInicio());
         evento.setFin(dto.getFin());
         if (dto.getClase() != null) {
-            evento.setClase(com.cultureclub.cclub.entity.ClaseEvento.valueOf(dto.getClase()));
+            evento.setClase(com.cultureclub.cclub.entity.enumeradores.ClaseEvento.valueOf(dto.getClase()));
         }
         return evento;
     }

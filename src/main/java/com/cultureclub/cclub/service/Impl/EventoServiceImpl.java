@@ -1,4 +1,4 @@
-package com.cultureclub.cclub.service;
+package com.cultureclub.cclub.service.Impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,11 +8,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.cultureclub.cclub.entity.ClaseEvento;
 import com.cultureclub.cclub.entity.Evento;
 import com.cultureclub.cclub.entity.Usuario;
 import com.cultureclub.cclub.entity.dto.EventoDTO;
+import com.cultureclub.cclub.entity.enumeradores.ClaseEvento;
 import com.cultureclub.cclub.repository.EventoRepository;
+import com.cultureclub.cclub.service.Int.EventoService;
+import com.cultureclub.cclub.service.Int.GestorUsuarioService;
 
 @Service
 public class EventoServiceImpl implements EventoService {

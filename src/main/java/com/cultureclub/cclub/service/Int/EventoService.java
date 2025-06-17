@@ -1,4 +1,4 @@
-package com.cultureclub.cclub.service;
+package com.cultureclub.cclub.service.Int;
 
 import org.springframework.data.domain.Page;
 

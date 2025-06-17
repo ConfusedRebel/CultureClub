@@ -1,10 +1,10 @@
-package com.mapper;
+package com.cultureclub.cclub.mapper;
 
 import com.cultureclub.cclub.entity.Entrada;
 import com.cultureclub.cclub.entity.Evento;
-import com.cultureclub.cclub.entity.TipoEntrada;
 import com.cultureclub.cclub.entity.Usuario;
 import com.cultureclub.cclub.entity.dto.EntradaDTO;
+import com.cultureclub.cclub.entity.enumeradores.TipoEntrada;
 
 public class EntradaMapper {
 

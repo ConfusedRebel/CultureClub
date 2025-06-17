@@ -1,4 +1,4 @@
-package com.cultureclub.cclub.service;
+package com.cultureclub.cclub.service.Int;
 
 import com.cultureclub.cclub.entity.dto.EntradaDTO;
 import com.cultureclub.cclub.entity.dto.UsuarioDTO;
@@ -17,8 +17,6 @@ public interface UsuarioService {
     String updateUsuario(Long id, UsuarioDTO data);
 
     Reporte reportarUsuario(ReporteDTO reporte) throws Exception;
-
-    public Usuario login(String email, String password);
 
     void calificarEvento(Long idUsuario, Long idEvento, int calificacion);
 

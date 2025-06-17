@@ -1,4 +1,4 @@
-package com.cultureclub.cclub.service;
+package com.cultureclub.cclub.service.Impl;
 
 import java.util.Optional;
 
@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 import com.cultureclub.cclub.entity.Ciudad;
 import com.cultureclub.cclub.entity.Entrada;
 import com.cultureclub.cclub.entity.Evento;
-import com.cultureclub.cclub.entity.TipoEntrada;
 import com.cultureclub.cclub.entity.Usuario;
 import com.cultureclub.cclub.entity.dto.EntradaDTO;
 import com.cultureclub.cclub.entity.dto.UsuarioDTO;
 import com.cultureclub.cclub.entity.dto.reporte.ReporteDTO;
+import com.cultureclub.cclub.entity.enumeradores.TipoEntrada;
 import com.cultureclub.cclub.entity.reportes.Reporte;
-
+import com.cultureclub.cclub.mapper.ReporteMapper;
 import com.cultureclub.cclub.repository.UsuarioRepository;
-import com.mapper.ReporteMapper;
+import com.cultureclub.cclub.service.Int.UsuarioService;
 
 import jakarta.transaction.Transactional;
 
@@ -61,7 +61,7 @@ public class UsuarioServiceImpl implements UsuarioService {
             usuario.setApellidos(data.getApellidos() != null ? data.getApellidos() : usuario.getApellidos());
             usuario.setCiudad(data.getCiudad() != null ? Ciudad.valueOf(data.getCiudad()) : usuario.getCiudad());
             usuario.setTelefono(data.getTelefono() != null ? data.getTelefono() : usuario.getTelefono());
-            usuario.setPremium(data.getIsPremium() != null ? data.getIsPremium() : usuario.getPremium());
+            usuario.setRoles(null != data.getRoles() ? data.getRoles() : usuario.getRoles());
             usuario.setPassword(data.getPassword() != null ? data.getPassword() : usuario.getPassword());
 
             usuarioRepository.save(usuario);
@@ -85,21 +85,6 @@ public class UsuarioServiceImpl implements UsuarioService {
             return reporteUsuarioRepository.save(usuario);
         } else {
             throw new IllegalArgumentException("Tipo de reporte no soportado");
-        }
-    }
-
-    @Override
-    public Usuario login(String email, String password) {
-        Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
-        if (usuario.isPresent()) {
-            Usuario foundUser = usuario.get();
-            if (foundUser.getPassword().equals(password)) {
-                return foundUser; // Login successful
-            } else {
-                throw new IllegalArgumentException("Contraseña incorrecta para el usuario: " + email);
-            }
-        } else {
-            throw new IllegalArgumentException("Usuario no encontrado con email: " + email);
         }
     }
 

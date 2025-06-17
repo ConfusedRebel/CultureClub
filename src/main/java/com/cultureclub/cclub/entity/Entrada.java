@@ -2,6 +2,8 @@ package com.cultureclub.cclub.entity;
 
 import java.sql.Date;
 
+import com.cultureclub.cclub.entity.enumeradores.TipoEntrada;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

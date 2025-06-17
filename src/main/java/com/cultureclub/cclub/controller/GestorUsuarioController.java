@@ -1,20 +1,16 @@
 package com.cultureclub.cclub.controller;
 
-import java.net.URI;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cultureclub.cclub.entity.Usuario;
 import com.cultureclub.cclub.entity.dto.UsuarioDTO;
-import com.cultureclub.cclub.service.GestorUsuarioService;
+import com.cultureclub.cclub.service.Int.GestorUsuarioService;
 
 @RestController
 @RequestMapping("/gestorUsuarios")
@@ -22,13 +18,6 @@ public class GestorUsuarioController {
 
     @Autowired
     private GestorUsuarioService gestorUsuarioService;
-
-    @PostMapping("")
-    public ResponseEntity<Object> postMethodName(@RequestBody UsuarioDTO entity) throws Exception {
-        System.out.println("Creando usuario: " + entity.getEmail());
-        Usuario usuario = gestorUsuarioService.createUsuario(entity);
-        return ResponseEntity.created(URI.create("/usuarios/" + usuario.getIdUsuario())).body(usuario);
-    }
 
     @GetMapping("")
     public ResponseEntity<Object> getUsuarioBy_Id_Email(@RequestBody UsuarioDTO param) {
@@ -43,8 +32,14 @@ public class GestorUsuarioController {
 
     @GetMapping("/premium")
     public ResponseEntity<Object> getPremiumUsuarios(
-            @RequestParam(required = false, defaultValue = "false") boolean isPremium) {
+            @RequestParam(required = false, defaultValue = "true") boolean isPremium) {
         return ResponseEntity.ok(gestorUsuarioService.getPremiumUsuarios(isPremium));
+    }
+
+    @GetMapping("/admin")
+    public ResponseEntity<Object> getAdmingUsuarios(
+            @RequestParam(required = false, defaultValue = "true") boolean isAdmin) {
+        return ResponseEntity.ok(gestorUsuarioService.getPremiumUsuarios(isAdmin));
     }
 
     @GetMapping("/all")

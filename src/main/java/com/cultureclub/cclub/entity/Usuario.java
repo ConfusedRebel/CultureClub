@@ -1,13 +1,16 @@
 package com.cultureclub.cclub.entity;
 
 import java.util.List;
+import java.util.Set;
 
+import com.cultureclub.cclub.entity.enumeradores.Rol;
 import com.cultureclub.cclub.entity.reportes.ReporteError;
 import com.cultureclub.cclub.entity.reportes.ReporteEvento;
 import com.cultureclub.cclub.entity.reportes.ReporteUsuario;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -29,9 +32,11 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idUsuario;
 
-    @Column
-    private Boolean premium;
-
+    @ElementCollection(targetClass = Rol.class)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "rol", nullable = false)
+    private Set<Rol> roles = Set.of(Rol.USUARIO);
+    
     @Column
     private String nombre;
 

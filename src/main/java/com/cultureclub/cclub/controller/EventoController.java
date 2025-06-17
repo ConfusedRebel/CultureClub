@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cultureclub.cclub.entity.Evento;
 import com.cultureclub.cclub.entity.dto.EventoDTO;
-import com.cultureclub.cclub.service.EventoService;
-import com.mapper.EventoMapper;
+import com.cultureclub.cclub.mapper.EventoMapper;
+import com.cultureclub.cclub.service.Int.EventoService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
