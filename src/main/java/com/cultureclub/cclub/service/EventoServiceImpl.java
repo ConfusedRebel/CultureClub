@@ -72,7 +72,7 @@ public class EventoServiceImpl implements EventoService {
         }
         ClaseEvento claseEvento;
         try {
-            claseEvento = ClaseEvento.valueOf(clase.toUpperCase());
+            claseEvento = ClaseEvento.valueOf(clase.toLowerCase());
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Clase de evento no válida: " + clase);
         }

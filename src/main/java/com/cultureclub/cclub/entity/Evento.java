@@ -50,10 +50,10 @@ public class Evento {
     private Date fin;
 
     @Column
-    private Integer calificacion;
+    private Integer calificacion = 0;
 
     @Column
-    private Integer cantidadVisitas;
+    private Integer cantidadVisitas = 0;
 
     @ManyToMany
     @JoinTable(name = "evento_seguidores", joinColumns = @JoinColumn(name = "evento_id"), inverseJoinColumns = @JoinColumn(name = "usuario_id"))

@@ -1,7 +1,7 @@
 package com.cultureclub.cclub.entity;
 
 public enum TipoEntrada {
-    General,
+    GENERAL,
     VIP,
-    Anticipada
+    ANTICIPADA
 }

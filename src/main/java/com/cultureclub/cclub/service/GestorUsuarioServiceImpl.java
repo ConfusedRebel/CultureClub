@@ -65,16 +65,20 @@ class GestorUsuarioServiceImpl implements GestorUsuarioService {
     }
 
     @Override
-    public Object getPremiumUsuarios() {
-        return usuarioRepository.findByPremium(true);
+    public Object getPremiumUsuarios(boolean isPremium) {
+        return usuarioRepository.findByPremium(isPremium);
     }
 
     @Override
     public void deleteUsuario(UsuarioDTO param) {
-        Optional<Usuario> usuario = usuarioRepository.findById(param.getIdUsuario());
-        if (usuario.isEmpty() && param.getEmail() != null) {
+        Optional<Usuario> usuario = Optional.empty();
+
+        if (param.getIdUsuario() != null) {
+            usuario = usuarioRepository.findById(param.getIdUsuario());
+        } else if (param.getEmail() != null) {
             usuario = usuarioRepository.findByEmail(param.getEmail());
         }
+
         if (usuario.isEmpty()) {
             throw new IllegalArgumentException("Usuario no encontrado con ID: " + param.getIdUsuario());
         }

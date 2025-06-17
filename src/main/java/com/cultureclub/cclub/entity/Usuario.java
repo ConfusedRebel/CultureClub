@@ -2,6 +2,12 @@ package com.cultureclub.cclub.entity;
 
 import java.util.List;
 
+import com.cultureclub.cclub.entity.reportes.Reporte;
+import com.cultureclub.cclub.entity.reportes.ReporteError;
+import com.cultureclub.cclub.entity.reportes.ReporteEvento;
+import com.cultureclub.cclub.entity.reportes.ReporteUsuario;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -56,9 +62,18 @@ public class Usuario {
     @ManyToMany(mappedBy = "seguidos") // Reverse relationship for followers
     private List<Usuario> seguidores;
 
-    @OneToMany(mappedBy = "compradorUsuario")
+    @OneToMany(mappedBy = "compradorUsuario", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Entrada> entradas;
 
-    @OneToMany(mappedBy = "usuarioOrganizador")
+    @OneToMany(mappedBy = "usuarioOrganizador", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Evento> eventosOrganizados;
+
+    @OneToMany(mappedBy = "usuarioEmisor", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<ReporteEvento> reportesEventos;
+
+    @OneToMany(mappedBy = "usuarioEmisor", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<ReporteUsuario> reportesUsuarios;
+
+    @OneToMany(mappedBy = "usuarioEmisor", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<ReporteError> reportesErrores;
 }

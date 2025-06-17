@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cultureclub.cclub.entity.Entrada;
 import com.cultureclub.cclub.entity.Usuario;
+import com.cultureclub.cclub.entity.dto.CalificacionDTO;
 import com.cultureclub.cclub.entity.dto.EntradaDTO;
 import com.cultureclub.cclub.entity.dto.UsuarioDTO;
 import com.cultureclub.cclub.entity.dto.reporte.ReporteDTO;
@@ -57,18 +58,20 @@ public class UsuarioController {
     }
 
     @GetMapping("/login")
-    public ResponseEntity<Object> login(@RequestParam String email, @RequestParam String password) {
-        Usuario usuario = usuarioService.login(email, password);
+    public ResponseEntity<Object> login(@RequestBody UsuarioDTO usuarioDTO) {
+        Usuario usuario = usuarioService.login(usuarioDTO.getEmail(), usuarioDTO.getPassword());
         if (usuario != null) {
-            return ResponseEntity.ok(usuario);
+            UsuarioDTO response = UsuarioMapper.toDTO(usuario);
+            return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(401).body("Invalid credentials");
         }
     }
 
-    @PostMapping("{idUsuario}/{idEvento}/calificar")
+    @PostMapping("{idUsuario}/calificar/{idEvento}")
     public ResponseEntity<Object> calificarEvento(@PathVariable Long idUsuario, @PathVariable Long idEvento,
-            @RequestBody int calificacion) {
+            @RequestBody CalificacionDTO calificacionDTO) {
+        Integer calificacion = calificacionDTO.getCalificacion();
         if (calificacion < 1 || calificacion > 5) {
             return ResponseEntity.badRequest().body("La calificación debe estar entre 1 y 5");
         }

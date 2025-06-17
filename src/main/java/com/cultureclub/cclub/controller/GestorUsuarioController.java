@@ -21,34 +21,34 @@ import com.cultureclub.cclub.service.GestorUsuarioService;
 public class GestorUsuarioController {
 
     @Autowired
-    private GestorUsuarioService usuarioService;
+    private GestorUsuarioService gestorUsuarioService;
 
     @PostMapping("")
     public ResponseEntity<Object> postMethodName(@RequestBody UsuarioDTO entity) throws Exception {
         System.out.println("Creando usuario: " + entity.getEmail());
-        Usuario usuario = usuarioService.createUsuario(entity);
+        Usuario usuario = gestorUsuarioService.createUsuario(entity);
         return ResponseEntity.created(URI.create("/usuarios/" + usuario.getIdUsuario())).body(usuario);
     }
 
     @GetMapping("")
-    public ResponseEntity<Object> getMethodName(@RequestParam UsuarioDTO param) {
-        return ResponseEntity.ok(usuarioService.getUsuario(param));
+    public ResponseEntity<Object> getUsuarioBy_Id_Email(@RequestBody UsuarioDTO param) {
+        return ResponseEntity.ok(gestorUsuarioService.getUsuario(param));
     }
 
     @DeleteMapping("")
-    public ResponseEntity<Object> deleteUsuario(@RequestParam UsuarioDTO param) {
-        usuarioService.deleteUsuario(param);
+    public ResponseEntity<Object> deleteUsuario(@RequestBody UsuarioDTO param) {
+        gestorUsuarioService.deleteUsuario(param);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/premium")
     public ResponseEntity<Object> getPremiumUsuarios(
             @RequestParam(required = false, defaultValue = "false") boolean isPremium) {
-        return ResponseEntity.ok(usuarioService.getPremiumUsuarios());
+        return ResponseEntity.ok(gestorUsuarioService.getPremiumUsuarios(isPremium));
     }
 
     @GetMapping("/all")
     public ResponseEntity<Object> getAllUsuarios() {
-        return ResponseEntity.ok(usuarioService.getAllUsuarios());
+        return ResponseEntity.ok(gestorUsuarioService.getAllUsuarios());
     }
 }

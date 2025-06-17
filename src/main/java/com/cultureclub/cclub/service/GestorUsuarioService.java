@@ -14,7 +14,7 @@ public interface GestorUsuarioService {
 
     public Object getUsuario(UsuarioDTO param);
 
-    public Object getPremiumUsuarios();
+    public Object getPremiumUsuarios(boolean isPremium);
 
     public void deleteUsuario(UsuarioDTO param);
 
