@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.cultureclub.cclub.entity.Evento;
 import com.cultureclub.cclub.entity.enumeradores.ClaseEvento;
+import com.cultureclub.cclub.entity.Ciudad;
 
 @Repository
 public interface EventoRepository extends JpaRepository<Evento, Long> {
@@ -18,4 +19,6 @@ public interface EventoRepository extends JpaRepository<Evento, Long> {
     List<Evento> findByNombre(String nombre);
 
     Page<Evento> findByClase(ClaseEvento claseEvento, Pageable pageable);
+
+    Page<Evento> findByUsuarioOrganizador_Ciudad(Ciudad ciudad, Pageable pageable);
 }

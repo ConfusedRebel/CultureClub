@@ -14,6 +14,8 @@ public class EventoMapper {
         dto.setPrecio(evento.getPrecio());
         dto.setInicio(evento.getInicio());
         dto.setFin(evento.getFin());
+        dto.setLatitud(evento.getLatitud());
+        dto.setLongitud(evento.getLongitud());
         dto.setClase(evento.getClase().name());
         return dto;
     }
@@ -27,6 +29,8 @@ public class EventoMapper {
         evento.setPrecio(dto.getPrecio());
         evento.setInicio(dto.getInicio());
         evento.setFin(dto.getFin());
+        evento.setLatitud(dto.getLatitud());
+        evento.setLongitud(dto.getLongitud());
         if (dto.getClase() != null) {
             evento.setClase(com.cultureclub.cclub.entity.enumeradores.ClaseEvento.valueOf(dto.getClase()));
         }

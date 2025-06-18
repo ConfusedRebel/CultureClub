@@ -76,4 +76,18 @@ public class EventoController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @GetMapping("/ciudad/{ciudad}")
+    public ResponseEntity<Page<EventoDTO>> getEventosByCiudad(
+            @PathVariable String ciudad,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        if (page >= 0 && size >= 0) {
+            Page<Evento> eventoPage = eventoService.getEventosByCiudad(ciudad, page, size);
+            Page<EventoDTO> dtoPage = eventoPage.map(EventoMapper::toDTO);
+            return ResponseEntity.ok(dtoPage);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
