@@ -52,6 +52,12 @@ public class Evento {
     private Date fin;
 
     @Column
+    private Double latitud;
+
+    @Column
+    private Double longitud;
+
+    @Column
     private Integer calificacion = 0;
 
     @Column
