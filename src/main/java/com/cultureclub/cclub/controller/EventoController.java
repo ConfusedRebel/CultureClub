@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/eventos")
@@ -32,6 +33,15 @@ public class EventoController {
             throws Exception {
         EventoDTO evento = EventoMapper.toDTO(eventoService.createEvento(entity, idUsuario));
         return ResponseEntity.created(URI.create("/eventos/" + evento.getIdEvento())).body(evento);
+    }
+
+    @PutMapping("/{idUsuario}/{idEvento}")
+    public ResponseEntity<EventoDTO> actualizarEvento(
+            @RequestBody EventoDTO entity,
+            @PathVariable Long idUsuario,
+            @PathVariable Long idEvento) {
+        Evento evento = eventoService.updateEvento(idEvento, entity, idUsuario);
+        return ResponseEntity.ok(EventoMapper.toDTO(evento));
     }
 
     @GetMapping("")

@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.cultureclub.cclub.entity.Evento;
@@ -13,6 +15,7 @@ import com.cultureclub.cclub.entity.Usuario;
 import com.cultureclub.cclub.entity.dto.EventoDTO;
 import com.cultureclub.cclub.entity.enumeradores.ClaseEvento;
 import com.cultureclub.cclub.repository.EventoRepository;
+import com.cultureclub.cclub.repository.UsuarioRepository;
 import com.cultureclub.cclub.service.Int.EventoService;
 import com.cultureclub.cclub.service.Int.GestorUsuarioService;
 
@@ -23,6 +26,18 @@ public class EventoServiceImpl implements EventoService {
     private EventoRepository eventoRepository;
     @Autowired
     private GestorUsuarioService usuarioService;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    private Usuario getAuthenticatedUsuario() {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null) {
+            throw new AccessDeniedException("Usuario no autenticado");
+        }
+        String email = auth.getName();
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new AccessDeniedException("Usuario no encontrado"));
+    }
 
     @Override
     public Page<Evento> getEventos(int page, int size) {
@@ -65,6 +80,38 @@ public class EventoServiceImpl implements EventoService {
         } else {
             throw new IllegalArgumentException("Evento no encontrado con ID: " + idEvento);
         }
+    }
+
+    @Override
+    public Evento updateEvento(Long idEvento, EventoDTO entity, Long idUsuario) {
+        Usuario authUser = getAuthenticatedUsuario();
+        if (!authUser.getIdUsuario().equals(idUsuario)) {
+            throw new AccessDeniedException("No autorizado para editar este evento");
+        }
+
+        Evento evento = eventoRepository.findById(idEvento)
+                .orElseThrow(() -> new IllegalArgumentException("Evento no encontrado con ID: " + idEvento));
+
+        if (!evento.getUsuarioOrganizador().getIdUsuario().equals(authUser.getIdUsuario())) {
+            throw new AccessDeniedException("No autorizado para editar este evento");
+        }
+
+        if (entity.getNombre() != null) {
+            evento.setNombre(entity.getNombre());
+        }
+        evento.setEntrada(entity.isEntrada());
+        evento.setPrecio(entity.getPrecio());
+        if (entity.getInicio() != null) {
+            evento.setInicio(entity.getInicio());
+        }
+        if (entity.getFin() != null) {
+            evento.setFin(entity.getFin());
+        }
+        if (entity.getClase() != null) {
+            evento.setClase(ClaseEvento.valueOf(entity.getClase()));
+        }
+
+        return eventoRepository.save(evento);
     }
 
     @Override
