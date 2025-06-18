@@ -12,9 +12,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.cultureclub.cclub.entity.Ciudad;
 import com.cultureclub.cclub.entity.Usuario;
 import com.cultureclub.cclub.entity.dto.UsuarioDTO;
+import com.cultureclub.cclub.entity.enumeradores.Ciudad;
 import com.cultureclub.cclub.entity.enumeradores.Rol;
 import com.cultureclub.cclub.entity.exceptions.UsuarioDuplicateException;
 import com.cultureclub.cclub.repository.UsuarioRepository;

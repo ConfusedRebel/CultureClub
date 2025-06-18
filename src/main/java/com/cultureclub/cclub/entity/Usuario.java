@@ -3,6 +3,7 @@ package com.cultureclub.cclub.entity;
 import java.util.List;
 import java.util.Set;
 
+import com.cultureclub.cclub.entity.enumeradores.Ciudad;
 import com.cultureclub.cclub.entity.enumeradores.Rol;
 import com.cultureclub.cclub.entity.reportes.ReporteError;
 import com.cultureclub.cclub.entity.reportes.ReporteEvento;

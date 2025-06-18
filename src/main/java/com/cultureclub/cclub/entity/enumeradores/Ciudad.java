@@ -1,4 +1,4 @@
-package com.cultureclub.cclub.entity;
+package com.cultureclub.cclub.entity.enumeradores;
 
 public enum Ciudad {
     CABA,
