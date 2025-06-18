@@ -56,6 +56,8 @@ public class EventoServiceImpl implements EventoService {
             evento.setPrecio(entity.getPrecio());
             evento.setInicio(entity.getInicio());
             evento.setFin(entity.getFin());
+            evento.setLatitud(entity.getLatitud());
+            evento.setLongitud(entity.getLongitud());
             evento.setClase(ClaseEvento.valueOf(entity.getClase()));
             // Buscar y asignar el organizador
             Usuario organizador = usuarioService.getUsuarioById(idUsuario)
@@ -106,6 +108,12 @@ public class EventoServiceImpl implements EventoService {
         }
         if (entity.getFin() != null) {
             evento.setFin(entity.getFin());
+        }
+        if (entity.getLatitud() != null) {
+            evento.setLatitud(entity.getLatitud());
+        }
+        if (entity.getLongitud() != null) {
+            evento.setLongitud(entity.getLongitud());
         }
         if (entity.getClase() != null) {
             evento.setClase(ClaseEvento.valueOf(entity.getClase()));

@@ -13,5 +13,7 @@ public class EventoDTO {
     int precio;
     Date inicio;
     Date fin;
+    Double latitud;
+    Double longitud;
     String clase;
 }
