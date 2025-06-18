@@ -1,12 +1,16 @@
 package com.cultureclub.cclub.security;
 
-import com.cultureclub.cclub.entity.Usuario;
-import lombok.AllArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.Collections;
+import java.util.stream.Collectors;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.cultureclub.cclub.entity.Usuario;
+
+import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class UsuarioDetails implements UserDetails {
@@ -15,8 +19,13 @@ public class UsuarioDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // You could return roles here. For now, just return empty.
-        return Collections.emptyList();
+        if (usuario.getRoles() == null) {
+            return Collections.emptyList();
+        }
+
+        return usuario.getRoles().stream()
+                .map(rol -> new SimpleGrantedAuthority("ROLE_" + rol.name()))
+                .collect(Collectors.toList());
     }
 
     @Override
