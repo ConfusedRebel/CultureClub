@@ -6,13 +6,17 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.cultureclub.cclub.entity.Evento;
 import com.cultureclub.cclub.entity.Usuario;
 import com.cultureclub.cclub.entity.dto.EventoDTO;
 import com.cultureclub.cclub.entity.enumeradores.ClaseEvento;
+import com.cultureclub.cclub.entity.Ciudad;
 import com.cultureclub.cclub.repository.EventoRepository;
+import com.cultureclub.cclub.repository.UsuarioRepository;
 import com.cultureclub.cclub.service.Int.EventoService;
 import com.cultureclub.cclub.service.Int.GestorUsuarioService;
 
@@ -23,6 +27,18 @@ public class EventoServiceImpl implements EventoService {
     private EventoRepository eventoRepository;
     @Autowired
     private GestorUsuarioService usuarioService;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    private Usuario getAuthenticatedUsuario() {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null) {
+            throw new AccessDeniedException("Usuario no autenticado");
+        }
+        String email = auth.getName();
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new AccessDeniedException("Usuario no encontrado"));
+    }
 
     @Override
     public Page<Evento> getEventos(int page, int size) {
@@ -41,6 +57,8 @@ public class EventoServiceImpl implements EventoService {
             evento.setPrecio(entity.getPrecio());
             evento.setInicio(entity.getInicio());
             evento.setFin(entity.getFin());
+            evento.setLatitud(entity.getLatitud());
+            evento.setLongitud(entity.getLongitud());
             evento.setClase(ClaseEvento.valueOf(entity.getClase()));
             // Buscar y asignar el organizador
             Usuario organizador = usuarioService.getUsuarioById(idUsuario)
@@ -68,6 +86,44 @@ public class EventoServiceImpl implements EventoService {
     }
 
     @Override
+    public Evento updateEvento(Long idEvento, EventoDTO entity, Long idUsuario) {
+        Usuario authUser = getAuthenticatedUsuario();
+        if (!authUser.getIdUsuario().equals(idUsuario)) {
+            throw new AccessDeniedException("No autorizado para editar este evento");
+        }
+
+        Evento evento = eventoRepository.findById(idEvento)
+                .orElseThrow(() -> new IllegalArgumentException("Evento no encontrado con ID: " + idEvento));
+
+        if (!evento.getUsuarioOrganizador().getIdUsuario().equals(authUser.getIdUsuario())) {
+            throw new AccessDeniedException("No autorizado para editar este evento");
+        }
+
+        if (entity.getNombre() != null) {
+            evento.setNombre(entity.getNombre());
+        }
+        evento.setEntrada(entity.isEntrada());
+        evento.setPrecio(entity.getPrecio());
+        if (entity.getInicio() != null) {
+            evento.setInicio(entity.getInicio());
+        }
+        if (entity.getFin() != null) {
+            evento.setFin(entity.getFin());
+        }
+        if (entity.getLatitud() != null) {
+            evento.setLatitud(entity.getLatitud());
+        }
+        if (entity.getLongitud() != null) {
+            evento.setLongitud(entity.getLongitud());
+        }
+        if (entity.getClase() != null) {
+            evento.setClase(ClaseEvento.valueOf(entity.getClase()));
+        }
+
+        return eventoRepository.save(evento);
+    }
+
+    @Override
     public Page<Evento> getEventosByClase(String clase, int page, int size) {
         if (page < 0 || size < 0) {
             throw new IllegalArgumentException("Los parámetros de paginación no pueden ser negativos");
@@ -79,6 +135,20 @@ public class EventoServiceImpl implements EventoService {
             throw new IllegalArgumentException("Clase de evento no válida: " + clase);
         }
         return eventoRepository.findByClase(claseEvento, PageRequest.of(page, size));
+    }
+
+    @Override
+    public Page<Evento> getEventosByCiudad(String ciudad, int page, int size) {
+        if (page < 0 || size < 0) {
+            throw new IllegalArgumentException("Los parámetros de paginación no pueden ser negativos");
+        }
+        Ciudad ciudadEnum;
+        try {
+            ciudadEnum = Ciudad.valueOf(ciudad.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Ciudad no válida: " + ciudad);
+        }
+        return eventoRepository.findByUsuarioOrganizador_Ciudad(ciudadEnum, PageRequest.of(page, size));
     }
 
 }

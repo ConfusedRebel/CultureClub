@@ -13,6 +13,10 @@ public interface EventoService {
 
     public Evento getEventoById(Long idEvento);
 
+    public Evento updateEvento(Long idEvento, EventoDTO entity, Long idUsuario);
+
     public Page<Evento> getEventosByClase(String clase, int page, int size);
+
+    public Page<Evento> getEventosByCiudad(String ciudad, int page, int size);
 
 }
