@@ -37,8 +37,9 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll() // anyone can access login/signup
                 .requestMatchers("/gestorUsuarios/**").hasRole("ADMIN")
                 .requestMatchers("/premium/**").hasAnyRole("ADMIN", "PREMIUM")
-                .requestMatchers("/usuarios/**").authenticated()
-                .requestMatchers("/eventos/**").authenticated()
+                .requestMatchers("/usuarios/**").hasAnyRole("ADMIN", "PREMIUM", "USUARIO")
+                .requestMatchers("/eventos/**").permitAll() // public endpoints
+
                 .anyRequest().denyAll()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
