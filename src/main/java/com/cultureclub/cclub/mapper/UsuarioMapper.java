@@ -1,8 +1,8 @@
 package com.cultureclub.cclub.mapper;
 
-import com.cultureclub.cclub.entity.Ciudad;
 import com.cultureclub.cclub.entity.Usuario;
 import com.cultureclub.cclub.entity.dto.UsuarioDTO;
+import com.cultureclub.cclub.entity.enumeradores.Ciudad;
 
 public class UsuarioMapper {
 

@@ -39,7 +39,6 @@ public class SecurityConfig {
                 .requestMatchers("/premium/**").hasAnyRole("ADMIN", "PREMIUM")
                 .requestMatchers("/usuarios/**").hasAnyRole("ADMIN", "PREMIUM", "USUARIO")
                 .requestMatchers("/eventos/**").permitAll() // public endpoints
-
                 .anyRequest().denyAll()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
