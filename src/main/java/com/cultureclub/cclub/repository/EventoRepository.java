@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.cultureclub.cclub.entity.Evento;
+import com.cultureclub.cclub.entity.enumeradores.Ciudad;
 import com.cultureclub.cclub.entity.enumeradores.ClaseEvento;
-import com.cultureclub.cclub.entity.Ciudad;
 
 @Repository
 public interface EventoRepository extends JpaRepository<Evento, Long> {
