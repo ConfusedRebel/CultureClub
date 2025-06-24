@@ -30,20 +30,22 @@ public class SecurityConfig {
     private JwtFilter jwtFilter;
     
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll() // anyone can access login/signup
-                .requestMatchers("/gestorUsuarios/**").hasRole("ADMIN")
-                .requestMatchers("/premium/**").hasAnyRole("ADMIN", "PREMIUM")
-                .requestMatchers("/usuarios/**").hasAnyRole("ADMIN", "PREMIUM", "USUARIO")
-                .requestMatchers("/eventos/**").permitAll() // public endpoints
-                .anyRequest().denyAll()
-            )
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf(csrf -> csrf.disable())
+        .cors(org.springframework.security.config.Customizer.withDefaults()) // 👈 Configura CORS usando Customizer (Spring Security 6+)
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/api/auth/**").permitAll()
+            .requestMatchers("/gestorUsuarios/**").hasRole("ADMIN")
+            .requestMatchers("/premium/**").hasAnyRole("ADMIN", "PREMIUM")
+            .requestMatchers("/usuarios/**").hasAnyRole("ADMIN", "PREMIUM", "USUARIO")
+            .requestMatchers("/eventos/**").permitAll()
+            .anyRequest().denyAll()
+        )
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
-    }
+    return http.build();
+}
+
 }

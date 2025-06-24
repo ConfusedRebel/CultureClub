@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cultureclub.cclub.entity.dto.UsuarioDTO;
 import com.cultureclub.cclub.entity.dto.Authentication.AuthRequestDTO;
 import com.cultureclub.cclub.entity.dto.Authentication.AuthResponseDTO;
 import com.cultureclub.cclub.entity.dto.Authentication.ErrorResponseDTO;
+import com.cultureclub.cclub.entity.dto.UsuarioDTO;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -27,6 +27,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UsuarioDTO request) {
+        System.out.println(request);
         try {
             String token = authService.register(request);
             return ResponseEntity.ok(new AuthResponseDTO(token));
