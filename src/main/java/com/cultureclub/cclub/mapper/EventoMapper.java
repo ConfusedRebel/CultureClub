@@ -17,6 +17,7 @@ public class EventoMapper {
         dto.setLatitud(evento.getLatitud());
         dto.setLongitud(evento.getLongitud());
         dto.setClase(evento.getClase().name());
+        dto.setImagen(evento.getImagen());
         return dto;
     }
 
@@ -34,6 +35,7 @@ public class EventoMapper {
         if (dto.getClase() != null) {
             evento.setClase(com.cultureclub.cclub.entity.enumeradores.ClaseEvento.valueOf(dto.getClase()));
         }
+        evento.setImagen(dto.getImagen());
         return evento;
     }
 }
