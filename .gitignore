@@ -56,3 +56,4 @@ src/main/resources/application.properties
 *.local
 application-*.yml
 application-*.properties
+src/main/resources/application.properties
