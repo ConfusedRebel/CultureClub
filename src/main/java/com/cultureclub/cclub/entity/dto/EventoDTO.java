@@ -16,4 +16,5 @@ public class EventoDTO {
     Double latitud;
     Double longitud;
     String clase;
+    byte[] imagen;
 }

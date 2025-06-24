@@ -60,6 +60,7 @@ public class EventoServiceImpl implements EventoService {
             evento.setLatitud(entity.getLatitud());
             evento.setLongitud(entity.getLongitud());
             evento.setClase(ClaseEvento.valueOf(entity.getClase()));
+            evento.setImagen(entity.getImagen());
             // Buscar y asignar el organizador
             Usuario organizador = usuarioService.getUsuarioById(idUsuario)
                     .orElseThrow(() -> new IllegalArgumentException("Organizador no encontrado"));
@@ -118,6 +119,9 @@ public class EventoServiceImpl implements EventoService {
         }
         if (entity.getClase() != null) {
             evento.setClase(ClaseEvento.valueOf(entity.getClase()));
+        }
+        if (entity.getImagen() != null) {
+            evento.setImagen(entity.getImagen());
         }
 
         return eventoRepository.save(evento);
