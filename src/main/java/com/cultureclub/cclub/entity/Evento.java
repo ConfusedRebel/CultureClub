@@ -18,6 +18,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Lob;
 import lombok.Data;
 
 @Entity
@@ -73,6 +74,10 @@ public class Evento {
 
     @Column
     private int clasificacion;
+
+    @Lob
+    @Column(name = "imagen")
+    private byte[] imagen;
 
     @OneToMany(mappedBy = "evento")
     private List<Entrada> entradas;
