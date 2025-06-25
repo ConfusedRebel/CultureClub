@@ -13,9 +13,9 @@ import lombok.Data;
         @JsonSubTypes.Type(value = ReporteErrorDTO.class, name = "error")
 })
 public class ReporteDTO {
-    private Long idReporte;
-    private Long idEmisor;
-    private Date fecha;
-    private String motivo;
-    private String descripcion;
+    private Long idReporte = 0L;
+    private Long idEmisor = 0L;
+    private Date fecha = new Date(System.currentTimeMillis());
+    private String motivo = "";
+    private String descripcion = "";
 }

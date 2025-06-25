@@ -53,6 +53,7 @@ public class EventoServiceImpl implements EventoService {
         } else {
             Evento evento = new Evento();
             evento.setNombre(entity.getNombre());
+            evento.setDescripcion(entity.getDescripcion());
             evento.setEntrada(entity.isEntrada());
             evento.setPrecio(entity.getPrecio());
             evento.setInicio(entity.getInicio());
@@ -102,6 +103,9 @@ public class EventoServiceImpl implements EventoService {
 
         if (entity.getNombre() != null) {
             evento.setNombre(entity.getNombre());
+        }
+        if (entity.getDescripcion() != null) {
+            evento.setDescripcion(entity.getDescripcion());
         }
         evento.setEntrada(entity.isEntrada());
         evento.setPrecio(entity.getPrecio());
@@ -153,6 +157,14 @@ public class EventoServiceImpl implements EventoService {
             throw new IllegalArgumentException("Ciudad no válida: " + ciudad);
         }
         return eventoRepository.findByUsuarioOrganizador_Ciudad(ciudadEnum, PageRequest.of(page, size));
+    }
+
+    @Override
+    public Page<Evento> getEventosByPrecio(int precio, int page, int size) {
+        if (page < 0 || size < 0) {
+            throw new IllegalArgumentException("Los parámetros de paginación no pueden ser negativos");
+        }
+        return eventoRepository.findByPrecioLessThanEqual(precio, PageRequest.of(page, size));
     }
 
 }

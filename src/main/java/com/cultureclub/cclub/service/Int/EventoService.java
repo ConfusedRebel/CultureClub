@@ -19,4 +19,6 @@ public interface EventoService {
 
     public Page<Evento> getEventosByCiudad(String ciudad, int page, int size);
 
+    public Page<Evento> getEventosByPrecio(int precio, int page, int size);
+
 }

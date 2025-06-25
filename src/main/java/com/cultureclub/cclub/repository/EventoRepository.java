@@ -21,4 +21,6 @@ public interface EventoRepository extends JpaRepository<Evento, Long> {
     Page<Evento> findByClase(ClaseEvento claseEvento, Pageable pageable);
 
     Page<Evento> findByUsuarioOrganizador_Ciudad(Ciudad ciudad, Pageable pageable);
+
+    Page<Evento> findByPrecioLessThanEqual(int precio, Pageable pageable);
 }
