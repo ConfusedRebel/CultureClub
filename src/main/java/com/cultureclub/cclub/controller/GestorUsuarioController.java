@@ -39,7 +39,7 @@ public class GestorUsuarioController {
     @GetMapping("/admin")
     public ResponseEntity<Object> getAdmingUsuarios(
             @RequestParam(required = false, defaultValue = "true") boolean isAdmin) {
-        return ResponseEntity.ok(gestorUsuarioService.getPremiumUsuarios(isAdmin));
+        return ResponseEntity.ok(gestorUsuarioService.getAdminUsuarios(isAdmin));
     }
 
     @GetMapping("/all")
