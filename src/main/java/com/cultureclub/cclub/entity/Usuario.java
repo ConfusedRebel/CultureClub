@@ -1,9 +1,8 @@
 package com.cultureclub.cclub.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.ArrayList;
-import com.cultureclub.cclub.entity.EventoAsistido;
 
 import com.cultureclub.cclub.entity.enumeradores.Ciudad;
 import com.cultureclub.cclub.entity.enumeradores.Rol;
@@ -14,7 +13,6 @@ import com.cultureclub.cclub.entity.reportes.ReporteUsuario;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Lob;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -23,6 +21,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
