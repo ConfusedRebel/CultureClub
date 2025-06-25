@@ -17,4 +17,5 @@ public class UsuarioDTO {
     private String password;
     private Integer telefono = 0;
     private Integer puntuacion = 0;
+    private byte[] foto;
 }

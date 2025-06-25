@@ -24,4 +24,8 @@ public interface UsuarioService {
 
     void seguirUsuario(Long usuarioId, Long usuarioSeguidoId);
 
+    void seguirEvento(Long usuarioId, Long eventoId);
+
+    java.util.List<com.cultureclub.cclub.entity.EventoAsistido> getEventosAsistidos(Long usuarioId);
+
 }

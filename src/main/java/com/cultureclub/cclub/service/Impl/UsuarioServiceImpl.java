@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.cultureclub.cclub.entity.Entrada;
 import com.cultureclub.cclub.entity.Evento;
+import com.cultureclub.cclub.entity.EventoAsistido;
 import com.cultureclub.cclub.entity.Usuario;
 import com.cultureclub.cclub.entity.dto.EntradaDTO;
 import com.cultureclub.cclub.entity.dto.UsuarioDTO;
@@ -164,6 +165,12 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuario.getEntradas().add(entrada);
         evento.getEntradas().add(entrada);
 
+        EventoAsistido asistido = new EventoAsistido();
+        asistido.setNombreEvento(evento.getNombre());
+        asistido.setFechaEvento(entradaDTO.getFechaUso());
+        usuario.getEventosAsistidos().add(asistido);
+        usuarioRepository.save(usuario);
+
         return Optional.ofNullable(entradaRepository.save(entrada));
 
     }
@@ -190,5 +197,27 @@ public class UsuarioServiceImpl implements UsuarioService {
         } else {
             System.out.println("El usuario " + usuario.getNombre() + " ya sigue a " + usuarioSeguido.getNombre());
         }
+    }
+
+    @Override
+    public void seguirEvento(Long usuarioId, Long eventoId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado con ID: " + usuarioId));
+        Evento evento = eventoRepository.findById(eventoId)
+                .orElseThrow(() -> new IllegalArgumentException("Evento no encontrado con ID: " + eventoId));
+
+        if (!evento.getSeguidores().contains(usuario)) {
+            evento.getSeguidores().add(usuario);
+            usuario.getEventosSeguidos().add(evento);
+            eventoRepository.save(evento);
+            usuarioRepository.save(usuario);
+        }
+    }
+
+    @Override
+    public java.util.List<EventoAsistido> getEventosAsistidos(Long usuarioId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado con ID: " + usuarioId));
+        return usuario.getEventosAsistidos();
     }
 }

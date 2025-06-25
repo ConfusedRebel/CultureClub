@@ -17,6 +17,7 @@ import com.cultureclub.cclub.mapper.EntradaMapper;
 import com.cultureclub.cclub.mapper.ReporteMapper;
 import com.cultureclub.cclub.mapper.UsuarioMapper;
 import com.cultureclub.cclub.service.Int.UsuarioService;
+import com.cultureclub.cclub.service.Int.NotificacionService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,9 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private NotificacionService notificacionService;
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getUsuarioById(@PathVariable Long id) {
@@ -81,6 +85,22 @@ public class UsuarioController {
     public String seguirUsuario(@PathVariable Long usuarioId, @PathVariable Long usuarioSeguidoId) {
         usuarioService.seguirUsuario(usuarioId, usuarioSeguidoId);
         return "Usuario seguido correctamente";
+    }
+
+    @PutMapping("/{usuarioId}/seguir-evento/{eventoId}")
+    public String seguirEvento(@PathVariable Long usuarioId, @PathVariable Long eventoId) {
+        usuarioService.seguirEvento(usuarioId, eventoId);
+        return "Evento seguido correctamente";
+    }
+
+    @GetMapping("/{usuarioId}/eventos-asistidos")
+    public ResponseEntity<Object> getEventosAsistidos(@PathVariable Long usuarioId) {
+        return ResponseEntity.ok(usuarioService.getEventosAsistidos(usuarioId));
+    }
+
+    @GetMapping("/{usuarioId}/notificaciones")
+    public ResponseEntity<Object> getNotificaciones(@PathVariable Long usuarioId) {
+        return ResponseEntity.ok(notificacionService.obtenerNotificacionesUsuario(usuarioId));
     }
 
 }

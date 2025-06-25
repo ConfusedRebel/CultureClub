@@ -2,6 +2,8 @@ package com.cultureclub.cclub.entity;
 
 import java.util.List;
 import java.util.Set;
+import java.util.ArrayList;
+import com.cultureclub.cclub.entity.EventoAsistido;
 
 import com.cultureclub.cclub.entity.enumeradores.Ciudad;
 import com.cultureclub.cclub.entity.enumeradores.Rol;
@@ -12,6 +14,7 @@ import com.cultureclub.cclub.entity.reportes.ReporteUsuario;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -60,12 +63,22 @@ public class Usuario {
     @Column
     private int telefono;
 
+    @Lob
+    @Column(name = "foto")
+    private byte[] foto;
+
     @ManyToMany // Many usuarios can follow many other usuarios
     @JoinTable(name = "usuario_seguidos", joinColumns = @JoinColumn(name = "seguidor_id"), inverseJoinColumns = @JoinColumn(name = "seguido_id"))
     private List<Usuario> seguidos;
 
     @ManyToMany(mappedBy = "seguidos") // Reverse relationship for followers
     private List<Usuario> seguidores;
+
+    @ManyToMany(mappedBy = "seguidores")
+    private List<Evento> eventosSeguidos = new ArrayList<>();
+
+    @ElementCollection
+    private List<EventoAsistido> eventosAsistidos = new ArrayList<>();
 
     @OneToMany(mappedBy = "compradorUsuario", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Entrada> entradas;
