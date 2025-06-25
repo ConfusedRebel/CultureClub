@@ -1,5 +1,6 @@
 package com.cultureclub.cclub.security;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Set;
@@ -16,6 +17,7 @@ class JwtRoleTest {
     @Test
     void tokenContainsRoleAdministrador() {
         Usuario admin = new Usuario();
+        admin.setIdUsuario(1L);
         admin.setEmail("admin@example.com");
         admin.setPassword("secret");
         admin.setRoles(Set.of(Rol.ADMINISTRADOR));
@@ -24,5 +26,6 @@ class JwtRoleTest {
         String token = jwtUtil.generateToken(userDetails);
 
         assertTrue(jwtUtil.extractRoles(token).contains("ROLE_ADMINISTRADOR"));
+        assertEquals(1L, jwtUtil.extractUserId(token));
     }
 }
