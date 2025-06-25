@@ -12,6 +12,7 @@ import com.cultureclub.cclub.entity.Evento;
 import com.cultureclub.cclub.entity.dto.EventoDTO;
 import com.cultureclub.cclub.mapper.EventoMapper;
 import com.cultureclub.cclub.service.Int.EventoService;
+import com.cultureclub.cclub.service.Int.NotificacionService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +29,9 @@ public class EventoController {
     @Autowired
     private EventoService eventoService;
 
+    @Autowired
+    private NotificacionService notificacionService;
+
     @PostMapping("/{idUsuario}")
     public ResponseEntity<EventoDTO> publicarEvento(@RequestBody EventoDTO entity, @PathVariable Long idUsuario)
             throws Exception {
@@ -42,6 +46,14 @@ public class EventoController {
             @PathVariable Long idEvento) {
         Evento evento = eventoService.updateEvento(idEvento, entity, idUsuario);
         return ResponseEntity.ok(EventoMapper.toDTO(evento));
+    }
+
+    @PostMapping("/{idEvento}/notificar")
+    public ResponseEntity<String> notificarSeguidores(
+            @PathVariable Long idEvento,
+            @RequestBody String mensaje) {
+        notificacionService.enviarNotificacion(idEvento, mensaje);
+        return ResponseEntity.ok("Notificacion enviada");
     }
 
     @GetMapping("")

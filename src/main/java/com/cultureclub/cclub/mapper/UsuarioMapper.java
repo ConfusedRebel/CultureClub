@@ -16,6 +16,7 @@ public class UsuarioMapper {
         dto.setPuntuacion(usuario.getPuntuacion());
         dto.setTelefono(usuario.getTelefono());
         dto.setRoles(dto.getRoles());
+        dto.setFoto(usuario.getFoto());
         return dto;
     }
 
@@ -34,6 +35,7 @@ public class UsuarioMapper {
         // Set other fields as needed (e.g., password, premium)
         usuario.setPassword(dto.getPassword());
         usuario.setRoles(dto.getRoles() != dto.getRoles() ? dto.getRoles() : usuario.getRoles());
+        usuario.setFoto(dto.getFoto());
         return usuario;
     }
 }
