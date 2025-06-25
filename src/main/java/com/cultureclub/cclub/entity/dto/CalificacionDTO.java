@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class CalificacionDTO {
-    private Integer calificacion;
+    private Integer calificacion = 0;
     // getters and setters
 }

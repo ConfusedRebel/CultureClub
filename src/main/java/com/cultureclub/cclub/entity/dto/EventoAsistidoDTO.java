@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 public class EventoAsistidoDTO {
-    private String nombreEvento;
-    private Date fechaEvento;
+    private String nombreEvento = "";
+    private Date fechaEvento = new Date(System.currentTimeMillis());
 }

@@ -6,6 +6,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ReporteErrorDTO extends ReporteDTO {
-    private String urlAfectada;
-    private String severidad;
+    private String urlAfectada = "";
+    private String severidad = "";
 }

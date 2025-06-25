@@ -6,9 +6,9 @@ import lombok.Data;
 
 @Data
 public class NotificacionDTO {
-    private Long idNotificacion;
-    private Long idEvento;
-    private Long idUsuario;
-    private String mensaje;
-    private Date fecha;
+    private Long idNotificacion = 0L;
+    private Long idEvento = 0L;
+    private Long idUsuario = 0L;
+    private String mensaje = "";
+    private Date fecha = new Date(System.currentTimeMillis());
 }

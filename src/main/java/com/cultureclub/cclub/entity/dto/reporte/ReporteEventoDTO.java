@@ -6,5 +6,5 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ReporteEventoDTO extends ReporteDTO {
-    private Long idEventoReportado;
+    private Long idEventoReportado = 0L;
 }

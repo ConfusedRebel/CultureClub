@@ -10,6 +10,7 @@ public class EventoMapper {
         dto.setIdEvento(evento.getIdEvento());
         dto.setIdOrganizador(evento.getUsuarioOrganizador().getIdUsuario());
         dto.setNombre(evento.getNombre());
+        dto.setDescripcion(evento.getDescripcion());
         dto.setEntrada(evento.isEntrada());
         dto.setPrecio(evento.getPrecio());
         dto.setInicio(evento.getInicio());
@@ -26,6 +27,7 @@ public class EventoMapper {
         evento.setIdEvento(dto.getIdEvento());
         evento.setUsuarioOrganizador(organizador);
         evento.setNombre(dto.getNombre());
+        evento.setDescripcion(dto.getDescripcion());
         evento.setEntrada(dto.isEntrada());
         evento.setPrecio(dto.getPrecio());
         evento.setInicio(dto.getInicio());
