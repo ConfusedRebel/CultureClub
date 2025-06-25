@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "aff04278-0dd1-40b8-a8e7-3b47a9db854b",
+		"_postman_id": "7d3e1bd0-1db0-4454-bc17-1da4f39babf9",
 		"name": "CultureClub API Tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "37900394"
@@ -150,7 +150,8 @@
 								"usuarios",
 								"1"
 							]
-						}
+						},
+						"description": "## Update User Information\n\nThis endpoint allows you to update the information of a specific user identified by their unique ID. The request is made using the HTTP PUT method to the URL `{{base_url}}/usuarios/{id}`, where `{id}` is the unique identifier of the user you wish to update.\n\n### Request Body\n\nThe request body must be in JSON format and should include the following parameter:\n\n- **nombre** (string): The new name for the user. This field is required to update the user's information.\n    \n\n#### Example Request Body\n\n``` json\n{\n  \"nombre\": \"Nuevo\"\n}\n\n ```\n\n### Response\n\nThe response will indicate the status of the update operation. A successful update will typically return a status code of 200, while a status code of 403 indicates that the request was forbidden, meaning the client does not have permission to perform this operation.\n\n#### Response Structure\n\n- **Status Code**: 403\n    \n- **Content-Type**: text/xml\n    \n- **Body**: The response body may not contain additional information.\n    \n\n### Important Notes\n\n- Ensure that you have the necessary permissions to update user information, as a 403 status code will be returned if access is denied.\n    \n- The endpoint expects the request body to be properly formatted as JSON; otherwise, it may result in an error."
 					},
 					"response": []
 				},
@@ -800,13 +801,13 @@
 							"raw": "{\r\n    \"nombre\": \"Evento\",\r\n    \"descripcion\": \"Desc\",\r\n    \"entrada\": true,\r\n    \"precio\": 10,\r\n    \"inicio\": \"2024-01-01\",\r\n    \"fin\": \"2024-01-02\",\r\n    \"clase\": \"mercadillo\"\r\n}"
 						},
 						"url": {
-							"raw": "{{base_url}}/eventos/3",
+							"raw": "{{base_url}}/eventos/1",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"eventos",
-								"3"
+								"1"
 							]
 						}
 					},
@@ -1879,16 +1880,6 @@
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{Authorization}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [
 							{
@@ -1898,7 +1889,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"juan@example.com\",\n    \"password\": \"12345678\"\n}"
+							"raw": "{\n    \"email\": \"fernando@example.com\",\n    \"password\": \"12345678\"\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/api/auth/login",
@@ -1917,16 +1908,6 @@
 				{
 					"name": "3 - Ruta protegida: /user/perfil",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{Authorization}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [
 							{
@@ -1949,159 +1930,191 @@
 				}
 			]
 		},
-                {
-                        "name": "AdditionalRequests",
-                        "item": [
-                                {
-                                        "name": "seguirEvento",
-                                        "event": [
-                                                {
-                                                        "listen": "test",
-                                                        "script": {
-                                                                "exec": [
-                                                                        "pm.test('Status 200', () => pm.response.to.have.status(200));"
-                                                                ],
-                                                                "type": "text/javascript",
-                                                                "packages": {}
-                                                        }
-                                                }
-                                        ],
-                                        "request": {
-                                                "method": "PUT",
-                                                "header": [
-                                                        {
-                                                                "key": "Content-Type",
-                                                                "value": "application/json"
-                                                        }
-                                                ],
-                                                "url": {
-                                                        "raw": "{{base_url}}/usuarios/1/seguir-evento/1",
-                                                        "host": [
-                                                                "{{base_url}}"
-                                                        ],
-                                                        "path": [
-                                                                "usuarios",
-                                                                "1",
-                                                                "seguir-evento",
-                                                                "1"
-                                                        ]
-                                                }
-                                        },
-                                        "response": []
-                                },
-                                {
-                                        "name": "getEventosAsistidos",
-                                        "event": [
-                                                {
-                                                        "listen": "test",
-                                                        "script": {
-                                                                "exec": [
-                                                                        "pm.test('Status 200', () => pm.response.to.have.status(200));"
-                                                                ],
-                                                                "type": "text/javascript",
-                                                                "packages": {}
-                                                        }
-                                                }
-                                        ],
-                                        "request": {
-                                                "method": "GET",
-                                                "header": [
-                                                        {
-                                                                "key": "Content-Type",
-                                                                "value": "application/json"
-                                                        }
-                                                ],
-                                                "url": {
-                                                        "raw": "{{base_url}}/usuarios/1/eventos-asistidos",
-                                                        "host": [
-                                                                "{{base_url}}"
-                                                        ],
-                                                        "path": [
-                                                                "usuarios",
-                                                                "1",
-                                                                "eventos-asistidos"
-                                                        ]
-                                                }
-                                        },
-                                        "response": []
-                                },
-                                {
-                                        "name": "getNotificaciones",
-                                        "event": [
-                                                {
-                                                        "listen": "test",
-                                                        "script": {
-                                                                "exec": [
-                                                                        "pm.test('Status 200', () => pm.response.to.have.status(200));"
-                                                                ],
-                                                                "type": "text/javascript",
-                                                                "packages": {}
-                                                        }
-                                                }
-                                        ],
-                                        "request": {
-                                                "method": "GET",
-                                                "header": [
-                                                        {
-                                                                "key": "Content-Type",
-                                                                "value": "application/json"
-                                                        }
-                                                ],
-                                                "url": {
-                                                        "raw": "{{base_url}}/usuarios/1/notificaciones",
-                                                        "host": [
-                                                                "{{base_url}}"
-                                                        ],
-                                                        "path": [
-                                                                "usuarios",
-                                                                "1",
-                                                                "notificaciones"
-                                                        ]
-                                                }
-                                        },
-                                        "response": []
-                                },
-                                {
-                                        "name": "crearResena",
-                                        "event": [
-                                                {
-                                                        "listen": "test",
-                                                        "script": {
-                                                                "exec": [
-                                                                        "pm.test('Status 200', () => pm.response.to.have.status(200));"
-                                                                ],
-                                                                "type": "text/javascript",
-                                                                "packages": {}
-                                                        }
-                                                }
-                                        ],
-                                        "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                        {
-                                                                "key": "Content-Type",
-                                                                "value": "application/json"
-                                                        }
-                                                ],
-                                                "body": {
-                                                        "mode": "raw",
-                                                        "raw": "{\"contenido\":\"Buena\"}"
-                                                },
-                                                "url": {
-                                                        "raw": "{{base_url}}/resenas/1/1",
-                                                        "host": [
-                                                                "{{base_url}}"
-                                                        ],
-                                                        "path": [
-                                                                "resenas",
-                                                                "1",
-                                                                "1"
-                                                        ]
-                                                }
-                                        },
-                                        "response": []
-                                }
-                        ]
-                }
-        ]
+		{
+			"name": "AdditionalRequests",
+			"item": [
+				{
+					"name": "seguirEvento",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/usuarios/1/seguir-evento/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"1",
+								"seguir-evento",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getEventosAsistidos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/usuarios/1/eventos-asistidos",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"1",
+								"eventos-asistidos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getNotificaciones",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/usuarios/1/notificaciones",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"usuarios",
+								"1",
+								"notificaciones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "crearResena",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"contenido\":\"Buena\"}"
+						},
+						"url": {
+							"raw": "{{base_url}}/resenas/1/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"resenas",
+								"1",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{auth_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
 }
