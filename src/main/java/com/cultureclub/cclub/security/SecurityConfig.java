@@ -36,9 +36,9 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         .cors(org.springframework.security.config.Customizer.withDefaults()) // 👈 Configura CORS usando Customizer (Spring Security 6+)
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/api/auth/**").permitAll()
-            .requestMatchers("/gestorUsuarios/**").hasRole("ADMIN")
-            .requestMatchers("/premium/**").hasAnyRole("ADMIN", "PREMIUM")
-            .requestMatchers("/usuarios/**").hasAnyRole("ADMIN", "PREMIUM", "USUARIO")
+            .requestMatchers("/gestorUsuarios/**").hasRole("ADMINISTRADOR")
+            .requestMatchers("/premium/**").hasAnyRole("ADMINISTRADOR", "PREMIUM")
+            .requestMatchers("/usuarios/**").hasAnyRole("ADMINISTRADOR", "PREMIUM", "USUARIO")
             .requestMatchers("/eventos/**").permitAll()
             .anyRequest().denyAll()
         )
