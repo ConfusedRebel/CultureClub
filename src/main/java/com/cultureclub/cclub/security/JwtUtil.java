@@ -34,6 +34,16 @@ public class JwtUtil {
             .collect(Collectors.toList());
         claims.put("roles", roles);
 
+        // If the UserDetails implementation exposes the Usuario entity, include
+        // its id in the JWT so that services can avoid additional lookups when
+        // required
+        if (userDetails instanceof UsuarioDetails usuarioDetails) {
+            Long id = usuarioDetails.getUsuario().getIdUsuario();
+            if (id != null) {
+                claims.put("userId", id);
+            }
+        }
+
         return Jwts.builder()
             .setClaims(claims)
             .setSubject(userDetails.getUsername())
@@ -41,6 +51,22 @@ public class JwtUtil {
             .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MS))
             .signWith(getSigningKey(), SignatureAlgorithm.HS256)
             .compact();
+    }
+
+    /** Extract the user id from the token or {@code null} if absent. */
+    public Long extractUserId(String token) {
+        Claims claims = extractAllClaims(token);
+        Object value = claims.get("userId");
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof Integer i) {
+            return i.longValue();
+        }
+        if (value instanceof Long l) {
+            return l;
+        }
+        return Long.valueOf(value.toString());
     }
 
     public String extractUsername(String token) {
