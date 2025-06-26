@@ -1,5 +1,6 @@
 package com.cultureclub.cclub.service.Impl;
 
+import java.net.URI;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.cultureclub.cclub.entity.Usuario;
 import com.cultureclub.cclub.entity.dto.UsuarioDTO;
 import com.cultureclub.cclub.entity.enumeradores.Rol;
+import com.cultureclub.cclub.mapper.UsuarioMapper;
 import com.cultureclub.cclub.repository.UsuarioRepository;
 import com.cultureclub.cclub.service.Int.GestorUsuarioService;
 
@@ -87,6 +89,17 @@ class GestorUsuarioServiceImpl implements GestorUsuarioService {
     @Override
     public Object getAllUsuarios() {
         return usuarioRepository.findAll();
+    }
+
+    @Override
+    public URI createUsuario(UsuarioDTO param) {
+        Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(param.getEmail());
+        if (usuarioExistente.isPresent()) {
+            throw new IllegalArgumentException("Ya existe un usuario con el email: " + param.getEmail());
+        }
+        Usuario nuevoUsuario = UsuarioMapper.toEntity(param);
+        usuarioRepository.save(nuevoUsuario);
+        return URI.create("/usuarios/" + nuevoUsuario.getIdUsuario());
     }
 
 }

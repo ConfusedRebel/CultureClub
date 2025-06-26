@@ -1,5 +1,6 @@
 package com.cultureclub.cclub.service.Int;
 
+import java.net.URI;
 import java.util.Optional;
 
 import com.cultureclub.cclub.entity.Usuario;
@@ -18,5 +19,7 @@ public interface GestorUsuarioService {
     public void deleteUsuario(UsuarioDTO param);
 
     public Object getAllUsuarios();
+
+    public URI createUsuario(UsuarioDTO param);
 
 }

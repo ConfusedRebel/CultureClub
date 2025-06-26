@@ -3,8 +3,6 @@ package com.cultureclub.cclub.service.Impl;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.cultureclub.cclub.entity.Entrada;
@@ -46,16 +44,6 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private EntradaRepository entradaRepository;
 
-    private Usuario getAuthenticatedUsuario() {
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null) {
-            throw new AccessDeniedException("Usuario no autenticado");
-        }
-        String email = auth.getName();
-        return usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new AccessDeniedException("Usuario no encontrado"));
-    }
-
     @Override
     public Optional<Usuario> getUsuarioById(Long id) {
         return usuarioRepository.findById(id);
@@ -63,22 +51,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public String updateUsuario(Long id, UsuarioDTO data) {
-        Usuario authUser = getAuthenticatedUsuario();
-        if (!authUser.getIdUsuario().equals(id)) {
-            throw new AccessDeniedException("No autorizado para editar otro usuario");
-        }
-
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
-        if (usuarioOpt.isEmpty()) {
-            throw new IllegalArgumentException("Usuario no encontrado con ID: " + id);
-        }
-
         Usuario usuario = usuarioOpt.get();
         usuario.setNombre(data.getNombre() != null ? data.getNombre() : usuario.getNombre());
         usuario.setEmail(data.getEmail() != null ? data.getEmail() : usuario.getEmail());
         usuario.setApellidos(data.getApellidos() != null ? data.getApellidos() : usuario.getApellidos());
         usuario.setCiudad(data.getCiudad() != null ? Ciudad.valueOf(data.getCiudad()) : usuario.getCiudad());
-        usuario.setTelefono(data.getTelefono() != null ? data.getTelefono() : usuario.getTelefono());
+        if (data.getTelefono() != null) {
+            usuario.setTelefono(data.getTelefono());
+        }
         usuario.setRoles(null != data.getRoles() ? data.getRoles() : usuario.getRoles());
         usuario.setPassword(data.getPassword() != null ? data.getPassword() : usuario.getPassword());
 
@@ -94,12 +75,12 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
         Reporte reporteEntity = ReporteMapper.toEntity(reporte, usuarioEmisor.get());
 
-        if (reporteEntity instanceof com.cultureclub.cclub.entity.reportes.ReporteError error) {
-            return reporteErrorRepository.save(error);
-        } else if (reporteEntity instanceof com.cultureclub.cclub.entity.reportes.ReporteEvento evento) {
-            return reporteEventoRepository.save(evento);
-        } else if (reporteEntity instanceof com.cultureclub.cclub.entity.reportes.ReporteUsuario usuario) {
-            return reporteUsuarioRepository.save(usuario);
+        if (reporteEntity instanceof com.cultureclub.cclub.entity.reportes.ReporteError) {
+            return reporteErrorRepository.save((com.cultureclub.cclub.entity.reportes.ReporteError) reporteEntity);
+        } else if (reporteEntity instanceof com.cultureclub.cclub.entity.reportes.ReporteEvento) {
+            return reporteEventoRepository.save((com.cultureclub.cclub.entity.reportes.ReporteEvento) reporteEntity);
+        } else if (reporteEntity instanceof com.cultureclub.cclub.entity.reportes.ReporteUsuario) {
+            return reporteUsuarioRepository.save((com.cultureclub.cclub.entity.reportes.ReporteUsuario) reporteEntity);
         } else {
             throw new IllegalArgumentException("Tipo de reporte no soportado");
         }
