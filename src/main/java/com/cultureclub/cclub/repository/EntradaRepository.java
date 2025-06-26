@@ -8,7 +8,7 @@ import com.cultureclub.cclub.entity.Entrada;
 
 public interface EntradaRepository extends JpaRepository<Entrada, Long> {
 
-    public List<Entrada> findByCompradorUsuario_Id(Long idUsuario);
+    public List<Entrada> findByCompradorUsuario_IdUsuario(Long idUsuario);
 
     // Additional methods can be added as needed, for example:
     // List<Entrada> findByEventoId(Long eventoId);

@@ -218,7 +218,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public List<Entrada> getEntradas(Long idUsuario) {
-        List<Entrada> entradas = entradaRepository.findByCompradorUsuario_Id(idUsuario);
+        List<Entrada> entradas = entradaRepository.findByCompradorUsuario_IdUsuario(idUsuario);
         if (entradas.isEmpty()) {
             throw new IllegalArgumentException("No se encontraron entradas para el usuario con ID: " + idUsuario);
         }
