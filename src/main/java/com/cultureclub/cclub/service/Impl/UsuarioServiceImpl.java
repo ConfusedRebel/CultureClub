@@ -227,7 +227,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public List<Usuario> getSeguidosByUsuario(Long usuarioId) {
-        List<Usuario> seguidos = usuarioRepository.findBySeguidos_IdUsuario(usuarioId);
+        List<Usuario> seguidos = usuarioRepository.findBySeguidores_IdUsuario(usuarioId);
         if (seguidos.isEmpty()) {
             throw new IllegalArgumentException("No se encontraron seguidos para el usuario con ID: " + usuarioId);
         }
