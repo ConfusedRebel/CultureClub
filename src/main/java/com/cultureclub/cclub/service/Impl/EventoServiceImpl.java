@@ -167,4 +167,28 @@ public class EventoServiceImpl implements EventoService {
         return eventoRepository.findByPrecioLessThanEqual(precio, PageRequest.of(page, size));
     }
 
+    @Override
+    public Boolean deleteEvento(Long idEvento) {
+        return eventoRepository.findById(idEvento)
+                .map(evento -> {
+                    eventoRepository.delete(evento);
+                    return true;
+                })
+                .orElseThrow(() -> new IllegalArgumentException("Evento no encontrado con ID: " + idEvento));
+    }
+
+    @Override
+    public List<Evento> getEventosPopulares() {
+        List<Evento> eventos = eventoRepository.findAll();
+        eventos.sort((e1, e2) -> Integer.compare(e2.getCantidadVisitas(), e1.getCantidadVisitas()));
+        return eventos.size() > 10 ? eventos.subList(0, 10) : eventos;
+    }
+
+    @Override
+    public List<Usuario> getSeguidoresByEvento(Long idEvento) {
+        return eventoRepository.findById(idEvento)
+                .map(Evento::getSeguidores)
+                .orElseThrow(() -> new IllegalArgumentException("Evento no encontrado con ID: " + idEvento));
+    }
+
 }

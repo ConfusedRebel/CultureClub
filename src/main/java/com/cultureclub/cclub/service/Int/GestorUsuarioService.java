@@ -22,4 +22,6 @@ public interface GestorUsuarioService {
 
     public URI createUsuario(UsuarioDTO param);
 
+    public Usuario updateUsuarioRol(UsuarioDTO param);
+
 }

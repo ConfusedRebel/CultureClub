@@ -1,5 +1,6 @@
 package com.cultureclub.cclub.service.Impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,7 +177,11 @@ public class UsuarioServiceImpl implements UsuarioService {
             usuarioRepository.save(usuarioSeguido);
             System.out.println("Usuario " + usuario.getNombre() + " ahora sigue a " + usuarioSeguido.getNombre());
         } else {
-            System.out.println("El usuario " + usuario.getNombre() + " ya sigue a " + usuarioSeguido.getNombre());
+            usuario.getSeguidos().remove(usuarioSeguido);
+            usuarioSeguido.getSeguidores().remove(usuario);
+            usuarioRepository.save(usuario);
+            usuarioRepository.save(usuarioSeguido);
+            System.out.println("Usuario " + usuario.getNombre() + " dejó de seguir a " + usuarioSeguido.getNombre());
         }
     }
 
@@ -200,5 +205,32 @@ public class UsuarioServiceImpl implements UsuarioService {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado con ID: " + usuarioId));
         return usuario.getEventosAsistidos();
+    }
+
+    @Override
+    public List<Usuario> getSeguidoresByUsuario(Long usuarioId) {
+    List<Usuario> seguidores = usuarioRepository.findBySeguidos_IdUsuario(usuarioId);
+        if (seguidores.isEmpty()) {
+            throw new IllegalArgumentException("No se encontraron seguidores para el usuario con ID: " + usuarioId);
+        }
+        return seguidores;
+    }
+
+    @Override
+    public List<Entrada> getEntradas(Long idUsuario) {
+        List<Entrada> entradas = entradaRepository.findByCompradorUsuario_Id(idUsuario);
+        if (entradas.isEmpty()) {
+            throw new IllegalArgumentException("No se encontraron entradas para el usuario con ID: " + idUsuario);
+        }
+        return entradas;
+    }
+
+    @Override
+    public List<Usuario> getSeguidosByUsuario(Long usuarioId) {
+        List<Usuario> seguidos = usuarioRepository.findBySeguidos_IdUsuario(usuarioId);
+        if (seguidos.isEmpty()) {
+            throw new IllegalArgumentException("No se encontraron seguidos para el usuario con ID: " + usuarioId);
+        }
+        return seguidos;
     }
 }

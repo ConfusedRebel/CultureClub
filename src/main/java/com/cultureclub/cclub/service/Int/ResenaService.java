@@ -6,7 +6,14 @@ import com.cultureclub.cclub.entity.Resena;
 import com.cultureclub.cclub.entity.dto.ResenaDTO;
 
 public interface ResenaService {
+
     Resena agregarResena(Long idUsuario, Long idEvento, ResenaDTO resena);
+    
     List<Resena> obtenerResenasEvento(Long idEvento);
+
     List<Resena> obtenerResenasUsuario(Long idUsuario);
+
+    public Resena actualizarResena(Long idResena, ResenaDTO resenaDTO);
+
+    public void eliminarResena(Long idResena);
 }

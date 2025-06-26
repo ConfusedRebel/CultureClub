@@ -22,4 +22,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     // Additional methods can be added as needed
 
+    public List<Usuario> findBySeguidos_IdUsuario(Long usuarioId);
+
 }

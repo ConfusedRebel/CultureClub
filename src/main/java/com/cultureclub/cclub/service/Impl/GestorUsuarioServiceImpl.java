@@ -102,4 +102,19 @@ class GestorUsuarioServiceImpl implements GestorUsuarioService {
         return URI.create("/usuarios/" + nuevoUsuario.getIdUsuario());
     }
 
+    @Override
+    public Usuario updateUsuarioRol(UsuarioDTO param) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(param.getIdUsuario());
+        if (usuarioOpt.isEmpty()) {
+            throw new IllegalArgumentException("Usuario no encontrado con ID: " + param.getIdUsuario());
+        }
+        Usuario usuario = usuarioOpt.get();
+        if (param.getRoles() != null && !param.getRoles().isEmpty()) {
+            usuario.setRoles(param.getRoles());
+        } else {
+            throw new IllegalArgumentException("Debe proporcionar al menos un rol para actualizar el usuario.");
+        }
+        return usuarioRepository.save(usuario);
+    }
+
 }

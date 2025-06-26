@@ -1,5 +1,7 @@
 package com.cultureclub.cclub.service.Int;
 
+import java.util.List;
+
 import com.cultureclub.cclub.entity.dto.EntradaDTO;
 import com.cultureclub.cclub.entity.dto.UsuarioDTO;
 import com.cultureclub.cclub.entity.dto.reporte.ReporteDTO;
@@ -8,6 +10,7 @@ import com.cultureclub.cclub.entity.reportes.Reporte;
 import java.util.Optional;
 
 import com.cultureclub.cclub.entity.Entrada;
+import com.cultureclub.cclub.entity.EventoAsistido;
 import com.cultureclub.cclub.entity.Usuario;
 
 public interface UsuarioService {
@@ -26,6 +29,12 @@ public interface UsuarioService {
 
     void seguirEvento(Long usuarioId, Long eventoId);
 
-    java.util.List<com.cultureclub.cclub.entity.EventoAsistido> getEventosAsistidos(Long usuarioId);
+    List<EventoAsistido> getEventosAsistidos(Long usuarioId);
+
+    public List<Usuario> getSeguidoresByUsuario(Long usuarioId);
+
+    public List<Entrada> getEntradas(Long idUsuario);
+
+    List<Usuario> getSeguidosByUsuario(Long usuarioId);
 
 }

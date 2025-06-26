@@ -1,10 +1,12 @@
 package com.cultureclub.cclub.controller;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +27,8 @@ import com.cultureclub.cclub.mapper.ReporteMapper;
 import com.cultureclub.cclub.mapper.UsuarioMapper;
 import com.cultureclub.cclub.service.Int.NotificacionService;
 import com.cultureclub.cclub.service.Int.UsuarioService;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/usuarios")
@@ -102,5 +106,33 @@ public class UsuarioController {
     public ResponseEntity<Object> getNotificaciones(@PathVariable Long usuarioId) {
         return ResponseEntity.ok(notificacionService.obtenerNotificacionesUsuario(usuarioId));
     }
+
+    @GetMapping("/{usuarioId}/seguidores")
+    public ResponseEntity<List<UsuarioDTO>> getSeguidores(@PathVariable Long usuarioId) {
+        List<UsuarioDTO> seguidores = ((List<Usuario>) usuarioService.getSeguidoresByUsuario(usuarioId))
+                .stream().map(UsuarioMapper::toDTO).toList();
+        return ResponseEntity.ok(seguidores);
+    }
+
+    @GetMapping("/{usuarioId}/seguidos")
+    public ResponseEntity<List<UsuarioDTO>> getSeguidos(@PathVariable Long usuarioId) {
+        List<UsuarioDTO> seguidos = ((List<Usuario>) usuarioService.getSeguidosByUsuario(usuarioId))
+                .stream().map(UsuarioMapper::toDTO).toList();
+        return ResponseEntity.ok(seguidos);
+    }
+
+    @DeleteMapping("/{UsuarioId}/seguir/{usuarioSeguidoId}")
+    public String dejarDeSeguirUsuario(@PathVariable Long UsuarioId, @PathVariable Long usuarioSeguidoId) {
+        usuarioService.seguirUsuario(UsuarioId, usuarioSeguidoId);
+        return "Dejaste de seguir al usuario correctamente";
+    }
+
+    @GetMapping("{idUsuario}/entradas")
+    public ResponseEntity<List<EntradaDTO>> getEntradasUsuario(@PathVariable Long idUsuario) {
+        List<EntradaDTO> entradas = usuarioService.getEntradas(idUsuario)
+                .stream().map(EntradaMapper::toDTO).toList();
+        return ResponseEntity.ok(entradas);
+    }
+    
 
 }

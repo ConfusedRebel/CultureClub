@@ -25,4 +25,16 @@ public class ResenaMapper {
         r.setFecha(dto.getFecha());
         return r;
     }
+
+    public static void updateEntityIfPresent(Resena resena, ResenaDTO dto) {
+    if (dto.getContenido() != null) {
+        resena.setContenido(dto.getContenido());
+    }
+    if (dto.getFecha() != null) {
+        resena.setFecha(dto.getFecha());
+    }
+    // Si quieres permitir actualizar usuario o evento, agrega validaciones similares:
+    // if (dto.getIdUsuario() != null) { ... }
+    // if (dto.getIdEvento() != null) { ... }
+}
 }
