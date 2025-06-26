@@ -19,6 +19,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Lob;
+import jakarta.persistence.CascadeType;
 import lombok.Data;
 
 @Entity
@@ -79,7 +80,7 @@ public class Evento {
     @Column(name = "imagen")
     private byte[] imagen;
 
-    @OneToMany(mappedBy = "evento")
+    @OneToMany(mappedBy = "evento", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Entrada> entradas;
 
 }
