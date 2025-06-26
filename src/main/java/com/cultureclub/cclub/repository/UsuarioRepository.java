@@ -24,4 +24,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     public List<Usuario> findBySeguidos_IdUsuario(Long usuarioId);
 
+    public List<Usuario> findBySeguidores_IdUsuario(Long idUsuario);
+
 }
