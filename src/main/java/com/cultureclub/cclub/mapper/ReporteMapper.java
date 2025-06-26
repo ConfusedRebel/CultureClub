@@ -59,9 +59,12 @@ public class ReporteMapper {
             reporte = r;
         } else if (dto instanceof ReporteEventoDTO eventoDto) {
             ReporteEvento r = new ReporteEvento();
-            com.cultureclub.cclub.entity.dto.EventoDTO eventoDtoTemp = new com.cultureclub.cclub.entity.dto.EventoDTO();
-            eventoDtoTemp.setIdEvento(eventoDto.getIdEventoReportado());
-            r.setEventoReportado(EventoMapper.toEntity(eventoDtoTemp, null));
+            // Only the ID of the event is required when creating the report.
+            // Instantiate the Evento with the provided ID instead of using the
+            // mapper which expects all fields to be present.
+            com.cultureclub.cclub.entity.Evento evento = new com.cultureclub.cclub.entity.Evento();
+            evento.setIdEvento(eventoDto.getIdEventoReportado());
+            r.setEventoReportado(evento);
             reporte = r;
         } else {
             throw new IllegalArgumentException("Unsupported ReporteDTO type: " + dto.getClass().getName());
