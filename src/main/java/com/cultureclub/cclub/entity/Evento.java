@@ -20,6 +20,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Lob;
+import jakarta.persistence.CascadeType;
 import lombok.Data;
 
 @Entity
@@ -82,5 +83,6 @@ public class Evento {
 
     @OneToMany(mappedBy = "evento")
     private List<Entrada> entradas = new ArrayList<>();
+
 
 }
