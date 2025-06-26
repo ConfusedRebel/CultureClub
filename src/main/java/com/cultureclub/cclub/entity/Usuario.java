@@ -68,10 +68,10 @@ public class Usuario {
 
     @ManyToMany // Many usuarios can follow many other usuarios
     @JoinTable(name = "usuario_seguidos", joinColumns = @JoinColumn(name = "seguidor_id"), inverseJoinColumns = @JoinColumn(name = "seguido_id"))
-    private List<Usuario> seguidos;
+    private List<Usuario> seguidos = new ArrayList<>();
 
     @ManyToMany(mappedBy = "seguidos") // Reverse relationship for followers
-    private List<Usuario> seguidores;
+    private List<Usuario> seguidores = new ArrayList<>();
 
     @ManyToMany(mappedBy = "seguidores")
     private List<Evento> eventosSeguidos = new ArrayList<>();
@@ -80,17 +80,17 @@ public class Usuario {
     private List<EventoAsistido> eventosAsistidos = new ArrayList<>();
 
     @OneToMany(mappedBy = "compradorUsuario", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Entrada> entradas;
+    private List<Entrada> entradas = new ArrayList<>();
 
     @OneToMany(mappedBy = "usuarioOrganizador", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Evento> eventosOrganizados;
+    private List<Evento> eventosOrganizados = new ArrayList<>();
 
     @OneToMany(mappedBy = "usuarioEmisor", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<ReporteEvento> reportesEventos;
+    private List<ReporteEvento> reportesEventos = new ArrayList<>();
 
     @OneToMany(mappedBy = "usuarioEmisor", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<ReporteUsuario> reportesUsuarios;
+    private List<ReporteUsuario> reportesUsuarios = new ArrayList<>();
 
     @OneToMany(mappedBy = "usuarioEmisor", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<ReporteError> reportesErrores;
+    private List<ReporteError> reportesErrores = new ArrayList<>();
 }

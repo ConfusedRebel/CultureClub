@@ -2,6 +2,7 @@ package com.cultureclub.cclub.entity;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.ArrayList;
 
 import com.cultureclub.cclub.entity.enumeradores.ClaseEvento;
 
@@ -67,7 +68,7 @@ public class Evento {
 
     @ManyToMany
     @JoinTable(name = "evento_seguidores", joinColumns = @JoinColumn(name = "evento_id"), inverseJoinColumns = @JoinColumn(name = "usuario_id"))
-    private List<Usuario> seguidores;
+    private List<Usuario> seguidores = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -80,7 +81,8 @@ public class Evento {
     @Column(name = "imagen")
     private byte[] imagen;
 
-    @OneToMany(mappedBy = "evento", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Entrada> entradas;
+    @OneToMany(mappedBy = "evento")
+    private List<Entrada> entradas = new ArrayList<>();
+
 
 }
