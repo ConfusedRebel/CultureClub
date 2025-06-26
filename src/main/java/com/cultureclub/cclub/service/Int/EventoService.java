@@ -21,4 +21,6 @@ public interface EventoService {
 
     public Page<Evento> getEventosByPrecio(int precio, int page, int size);
 
+    public Boolean deleteEvento(Long idEvento);
+
 }

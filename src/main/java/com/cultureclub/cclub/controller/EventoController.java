@@ -3,6 +3,7 @@ package com.cultureclub.cclub.controller;
 import org.springframework.data.domain.Page;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,10 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cultureclub.cclub.entity.Evento;
 import com.cultureclub.cclub.entity.dto.EventoDTO;
+import com.cultureclub.cclub.entity.dto.UsuarioDTO;
 import com.cultureclub.cclub.mapper.EventoMapper;
 import com.cultureclub.cclub.service.Int.EventoService;
 import com.cultureclub.cclub.service.Int.NotificacionService;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -116,4 +119,16 @@ public class EventoController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @DeleteMapping ("/{idEvento}")
+    public ResponseEntity<Boolean> eliminarEvento(@PathVariable Long idEvento) {
+        Boolean isElim = eventoService.deleteEvento(idEvento);
+        return ResponseEntity.ok(isElim);
+    }
+    @GetMapping("/ídx/{idEvento}/seguidores")
+    public ResponseEntity<List<UsuarioDTO>> getSeguidoresByEvento(@PathVariable Long idEvento) {
+        List<UsuarioDTO> seguidores = eventoService.getSeguidoresByEvento(idEvento);
+        return ResponseEntity.ok(seguidores);
+    }
+}
 }
