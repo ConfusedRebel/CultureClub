@@ -32,5 +32,8 @@ public class Resena {
     private String contenido;
 
     @Column
+    private int calificacion = 0;
+
+    @Column
     private Date fecha;
 }

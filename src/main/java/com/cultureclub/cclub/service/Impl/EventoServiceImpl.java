@@ -61,6 +61,7 @@ public class EventoServiceImpl implements EventoService {
             evento.setLatitud(entity.getLatitud());
             evento.setLongitud(entity.getLongitud());
             evento.setClase(ClaseEvento.valueOf(entity.getClase()));
+            evento.setCiudad(Ciudad.valueOf(entity.getCiudad().toUpperCase()));
             evento.setImagen(entity.getImagen());
             // Buscar y asignar el organizador
             Usuario organizador = usuarioService.getUsuarioById(idUsuario)

@@ -1,11 +1,14 @@
 package com.cultureclub.cclub.entity;
 
-import java.sql.Date;
-import java.util.List;
+import java.sql.Blob;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
+import com.cultureclub.cclub.entity.enumeradores.Ciudad;
 import com.cultureclub.cclub.entity.enumeradores.ClaseEvento;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,12 +18,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Lob;
-import jakarta.persistence.CascadeType;
 import lombok.Data;
 
 @Entity
@@ -74,15 +76,21 @@ public class Evento {
     @Column(nullable = false)
     private ClaseEvento clase;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Ciudad ciudad;
+
     @Column
     private int clasificacion;
 
     @Lob
     @Column(name = "imagen")
-    private byte[] imagen;
+    private Blob imagen;
 
     @OneToMany(mappedBy = "evento")
     private List<Entrada> entradas = new ArrayList<>();
-
+    
+    @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Resena> resenas;
 
 }

@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cultureclub.cclub.entity.Entrada;
 import com.cultureclub.cclub.entity.Evento;
 import com.cultureclub.cclub.entity.Resena;
 import com.cultureclub.cclub.entity.Usuario;
@@ -33,6 +32,7 @@ public class ResenaServiceImpl implements ResenaService {
         Evento evento = eventoRepository.findById(idEvento)
                 .orElseThrow(() -> new IllegalArgumentException("Evento no encontrado"));
         Resena resena = ResenaMapper.toEntity(resenaDTO, evento, usuario);
+        resena.setIdResena(null); // Asegurarse de que el ID sea nulo para crear una nueva reseña
         return resenaRepository.save(resena);
     }
 

@@ -1,7 +1,7 @@
 package com.cultureclub.cclub.mapper;
 
-import com.cultureclub.cclub.entity.Resena;
 import com.cultureclub.cclub.entity.Evento;
+import com.cultureclub.cclub.entity.Resena;
 import com.cultureclub.cclub.entity.Usuario;
 import com.cultureclub.cclub.entity.dto.ResenaDTO;
 
@@ -13,6 +13,7 @@ public class ResenaMapper {
         dto.setIdUsuario(resena.getUsuario().getIdUsuario());
         dto.setContenido(resena.getContenido());
         dto.setFecha(resena.getFecha());
+        dto.setCalificacion(resena.getCalificacion());
         return dto;
     }
 
@@ -23,6 +24,7 @@ public class ResenaMapper {
         r.setUsuario(usuario);
         r.setContenido(dto.getContenido());
         r.setFecha(dto.getFecha());
+        r.setCalificacion(dto.getCalificacion());
         return r;
     }
 

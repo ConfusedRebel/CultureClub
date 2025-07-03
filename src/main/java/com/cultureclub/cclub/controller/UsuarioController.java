@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cultureclub.cclub.entity.Entrada;
 import com.cultureclub.cclub.entity.Usuario;
+import com.cultureclub.cclub.entity.dto.Authentication.AuthRequestDTO;
 import com.cultureclub.cclub.entity.dto.CalificacionDTO;
 import com.cultureclub.cclub.entity.dto.EntradaDTO;
 import com.cultureclub.cclub.entity.dto.UsuarioDTO;
@@ -27,7 +29,6 @@ import com.cultureclub.cclub.mapper.ReporteMapper;
 import com.cultureclub.cclub.mapper.UsuarioMapper;
 import com.cultureclub.cclub.service.Int.NotificacionService;
 import com.cultureclub.cclub.service.Int.UsuarioService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -39,6 +40,22 @@ public class UsuarioController {
 
     @Autowired
     private NotificacionService notificacionService;
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody AuthRequestDTO loginRequest) {
+    try {
+        Usuario usuario = usuarioService.login(loginRequest.getEmail(), loginRequest.getPassword()).get();
+        UsuarioDTO usuarioDTO = UsuarioMapper.toDTO(usuario);
+        return ResponseEntity.ok(usuarioDTO);
+    } catch (IllegalArgumentException e) {
+        // Credenciales inválidas
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
+    } catch (Exception e) {
+        // Cualquier otro error no controlado
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
+    }
+}
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getUsuarioById(@PathVariable Long id) {

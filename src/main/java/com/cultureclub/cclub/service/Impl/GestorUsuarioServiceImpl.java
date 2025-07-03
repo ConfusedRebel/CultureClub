@@ -98,6 +98,7 @@ class GestorUsuarioServiceImpl implements GestorUsuarioService {
             throw new IllegalArgumentException("Ya existe un usuario con el email: " + param.getEmail());
         }
         Usuario nuevoUsuario = UsuarioMapper.toEntity(param);
+        nuevoUsuario.setIdUsuario(null); // Asegurarse de que el ID sea nulo para que se genere uno nuevo
         usuarioRepository.save(nuevoUsuario);
         return URI.create("/usuarios/" + nuevoUsuario.getIdUsuario());
     }

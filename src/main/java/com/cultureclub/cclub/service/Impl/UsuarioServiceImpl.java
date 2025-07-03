@@ -233,4 +233,21 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
         return seguidos;
     }
+
+    @Override
+public Optional<Usuario> login(String email, String password) {
+    Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
+    
+    if (usuarioOpt.isEmpty()) {
+        throw new IllegalArgumentException("Credenciales inválidas");
+    }
+
+    Usuario usuario = usuarioOpt.get();
+
+    if (!usuario.getPassword().equals(password)) {
+        throw new IllegalArgumentException("Credenciales inválidas");
+    }
+
+    return Optional.of(usuario);
+}
 }
