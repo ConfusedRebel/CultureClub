@@ -36,4 +36,12 @@ public class Resena {
 
     @Column
     private Date fecha;
+
+    public String getNombreUsuario() {
+        return usuario != null ? usuario.getNombre() + " " + usuario.getApellidos() : null;
+    }
+
+    public String getNombreEvento() {
+        return evento != null ? evento.getNombre() : null;
+    }
 }

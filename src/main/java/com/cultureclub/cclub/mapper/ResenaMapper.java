@@ -14,6 +14,8 @@ public class ResenaMapper {
         dto.setContenido(resena.getContenido());
         dto.setFecha(resena.getFecha());
         dto.setCalificacion(resena.getCalificacion());
+        dto.setNombreEvento(resena.getNombreEvento());
+        dto.setNombreUsuario(resena.getNombreUsuario());
         return dto;
     }
 

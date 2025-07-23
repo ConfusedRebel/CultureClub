@@ -16,7 +16,16 @@ public class UsuarioMapper {
         dto.setPuntuacion(usuario.getPuntuacion());
         dto.setTelefono(usuario.getTelefono());
         dto.setRoles(usuario.getRoles());
-        dto.setFoto(usuario.getFoto());
+        if (usuario.getFoto() != null) {
+            try {
+                int blobLength = (int) usuario.getFoto().length();
+                byte[] bytes = usuario.getFoto().getBytes(1, blobLength);
+                String base64 = java.util.Base64.getEncoder().encodeToString(bytes);
+                dto.setFoto64(base64); // El campo imagen del DTO debe ser String
+            } catch (Exception e) {
+                dto.setImagen(null);
+            }
+        }
         return dto;
     }
 
@@ -35,7 +44,7 @@ public class UsuarioMapper {
         // Set other fields as needed (e.g., password, premium)
         usuario.setPassword(dto.getPassword());
         usuario.setRoles(dto.getRoles() != null ? dto.getRoles() : usuario.getRoles());
-        usuario.setFoto(dto.getFoto());
+        usuario.setFoto(dto.getFotoBlob());
         return usuario;
     }
 }

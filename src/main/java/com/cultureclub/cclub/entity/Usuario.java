@@ -1,5 +1,6 @@
 package com.cultureclub.cclub.entity;
 
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -64,7 +65,7 @@ public class Usuario {
 
     @Lob
     @Column(name = "foto")
-    private byte[] foto;
+    private Blob foto;
 
     @ManyToMany // Many usuarios can follow many other usuarios
     @JoinTable(name = "usuario_seguidos", joinColumns = @JoinColumn(name = "seguidor_id"), inverseJoinColumns = @JoinColumn(name = "seguido_id"))

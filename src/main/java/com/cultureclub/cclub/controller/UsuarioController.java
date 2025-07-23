@@ -1,6 +1,7 @@
 package com.cultureclub.cclub.controller;
 
 import java.net.URI;
+import java.sql.Blob;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,12 +10,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cultureclub.cclub.entity.Entrada;
 import com.cultureclub.cclub.entity.Usuario;
@@ -67,7 +71,22 @@ public class UsuarioController {
     }
 
     @PutMapping(value = "/{id}", consumes = "multipart/form-data")
-    public String putUsuarioByIdSinFoto(@PathVariable Long id, @RequestBody UsuarioDTO data) {
+    public String putUsuarioById(
+            @PathVariable Long id,
+            @ModelAttribute UsuarioDTO data,
+            @RequestParam (value = "imagen", required = false) MultipartFile imagen
+    ) {
+        try {
+            if (imagen != null && !imagen.isEmpty()) {
+                byte[] bytes = imagen.getBytes();
+                Blob imageBlob = new javax.sql.rowset.serial.SerialBlob(bytes);
+                data.setFotoBlob(imageBlob);
+            }
+        } catch (java.io.IOException e) {
+            throw new RuntimeException("Error al leer la imagen", e);
+        } catch (java.sql.SQLException e) {
+            throw new RuntimeException("Error al crear el Blob de la imagen", e);
+        }
         return usuarioService.updateUsuario(id, data);
     }
 

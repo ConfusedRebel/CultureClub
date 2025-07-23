@@ -1,5 +1,6 @@
 package com.cultureclub.cclub.entity.dto;
 
+import java.sql.Blob;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,6 +21,7 @@ public class UsuarioDTO {
     private String password = "";
     private Integer telefono = 0;
     private Integer puntuacion = 0;
-    private byte[] foto = new byte[0];
+    private String foto64 = "";
+    private Blob fotoBlob = null;
     private MultipartFile imagen = null;
 }

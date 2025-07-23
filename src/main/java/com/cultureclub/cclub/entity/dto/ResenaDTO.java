@@ -12,4 +12,6 @@ public class ResenaDTO {
     private String contenido = "";
     private int calificacion = 0; // Calificación de la reseña, por defecto 0
     private Date fecha = new Date(System.currentTimeMillis());
+    private String nombreEvento = "";
+    private String nombreUsuario = "";
 }

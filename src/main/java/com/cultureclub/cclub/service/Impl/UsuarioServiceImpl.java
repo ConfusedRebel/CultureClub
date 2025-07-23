@@ -59,13 +59,13 @@ public class UsuarioServiceImpl implements UsuarioService {
         Usuario usuario = usuarioOpt.get();
         usuario.setNombre(!data.getNombre().isEmpty() ? data.getNombre() : usuario.getNombre());
         usuario.setEmail(!data.getEmail().isEmpty() ? data.getEmail() : usuario.getEmail());
-        usuario.setApellidos(data.getApellidos() != null ? data.getApellidos() : usuario.getApellidos());
+        usuario.setApellidos(!data.getApellidos().isEmpty() ? data.getApellidos() : usuario.getApellidos());
         usuario.setCiudad(!data.getCiudad().equals("") ? Enum.valueOf(Ciudad.class, data.getCiudad().toUpperCase()) : usuario.getCiudad());
         if (data.getTelefono() != 0){
             usuario.setTelefono(data.getTelefono());
         }
         usuario.setPassword(!"".equals(data.getPassword()) ? data.getPassword() : usuario.getPassword());
-
+        usuario.setFoto(data.getFotoBlob() != null ? data.getFotoBlob() : usuario.getFoto());
         usuarioRepository.save(usuario);
         return "Usuario actualizado correctamente";
     }
