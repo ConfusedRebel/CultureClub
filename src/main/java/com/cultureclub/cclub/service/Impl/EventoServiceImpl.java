@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -180,10 +182,8 @@ public class EventoServiceImpl implements EventoService {
 
     @Override
     public List<Evento> getEventosPopulares() {
-        List<Evento> eventos = eventoRepository.findAll();
-        eventos.sort((e1, e2) -> Integer.compare(e2.getCantidadVisitas(), e1.getCantidadVisitas()));
-        return eventos.size() > 10 ? eventos.subList(0, 10) : eventos;
-    }
+        return eventoRepository.findTop3ByOrderByCantidadVisitasDesc();
+}
 
     @Override
     public List<Usuario> getSeguidoresByEvento(Long idEvento) {
@@ -191,5 +191,45 @@ public class EventoServiceImpl implements EventoService {
                 .map(Evento::getSeguidores)
                 .orElseThrow(() -> new IllegalArgumentException("Evento no encontrado con ID: " + idEvento));
     }
+
+    @Override
+public Page<Evento> getEventosByFilter(EventoDTO filtro) {
+    Specification<Evento> spec = Specification.where(null);
+
+    if (filtro.getNombre() != null && !filtro.getNombre().isEmpty()) {
+        spec = spec.and((root, query, cb) -> cb.like(cb.lower(root.get("nombre")), "%" + filtro.getNombre().toLowerCase() + "%"));
+    }
+
+    if (filtro.getCiudad() != null && !filtro.getCiudad().isEmpty()) {
+    spec = spec.and((root, query, cb) -> cb.equal(root.get("ciudad"), Ciudad.valueOf(filtro.getCiudad())));
+    }
+
+    if (filtro.getClase() != null && !filtro.getClase().isEmpty()) {
+        spec = spec.and((root, query, cb) -> cb.equal(root.get("clase"), ClaseEvento.valueOf(filtro.getClase())));
+    }
+
+
+    if (filtro.getPrecio() > 0) {
+        spec = spec.and((root, query, cb) -> cb.lessThanOrEqualTo(root.get("precio"), filtro.getPrecio()));
+    }
+
+    if (filtro.getInicio() != null) {
+    spec = spec.and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get("inicio"), filtro.getInicio()));
+    }
+
+    if (filtro.getFin() != null) {
+        spec = spec.and((root, query, cb) -> cb.lessThanOrEqualTo(root.get("fin"), filtro.getFin()));
+    }
+
+
+    Pageable pageable = PageRequest.of(0, 20); // Ajustá según necesites paginación
+    return eventoRepository.findAll(spec, pageable);
+}
+
+    @Override
+    public List<Evento> getEventosByName(String param) {
+        return eventoRepository.findByNombreContainingIgnoreCase(param);
+    }
+
 
 }

@@ -30,4 +30,8 @@ public interface EventoService {
 
     public List<Usuario> getSeguidoresByEvento(Long idEvento);
 
+    public Page<Evento> getEventosByFilter(EventoDTO filtro);
+
+    public List<Evento> getEventosByName(String param);
+
 }

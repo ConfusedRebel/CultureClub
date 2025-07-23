@@ -5,10 +5,13 @@ public enum ClaseEvento {
     concierto,
     desfile,
     teatro,
+    arte,
     exposicion,
     festival,
     fiesta,
+    cine,
     mercadillo,
     taller,
+    stand_up,
     otro
 }

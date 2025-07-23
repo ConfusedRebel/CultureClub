@@ -153,6 +153,13 @@ public class EventoController {
         }
     }
 
+    @PostMapping("/filtrar")
+    public ResponseEntity<Page<EventoDTO>> getMethodName(@RequestBody EventoDTO filtro) {
+        return ResponseEntity.ok(eventoService.getEventosByFilter(filtro)
+            .map(EventoMapper::toDTO));
+    }
+    
+
     @DeleteMapping ("/{idEvento}")
     public ResponseEntity<Boolean> eliminarEvento(@PathVariable Long idEvento) {
         Boolean isElim = eventoService.deleteEvento(idEvento);
@@ -174,5 +181,13 @@ public class EventoController {
             .collect(java.util.stream.Collectors.toList());
         return ResponseEntity.ok(eventosPopulares);
     }
-    
+
+    @GetMapping("/buscar/{nombreEvento}")
+    public ResponseEntity<List<EventoDTO>> buscarPorNombre(@PathVariable String nombreEvento) {
+        List<Evento> eventos = eventoService.getEventosByName(nombreEvento);
+        return ResponseEntity.ok(
+            eventos.stream().map(EventoMapper::toDTO).toList()
+        );
+    }
+
 }

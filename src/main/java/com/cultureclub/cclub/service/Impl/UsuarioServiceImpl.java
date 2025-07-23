@@ -53,16 +53,18 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public String updateUsuario(Long id, UsuarioDTO data) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+        if (usuarioOpt.isEmpty()) {
+            throw new IllegalArgumentException("Usuario no encontrado con ID: " + id);
+        }
         Usuario usuario = usuarioOpt.get();
-        usuario.setNombre(data.getNombre() != null ? data.getNombre() : usuario.getNombre());
-        usuario.setEmail(data.getEmail() != null ? data.getEmail() : usuario.getEmail());
+        usuario.setNombre(!data.getNombre().isEmpty() ? data.getNombre() : usuario.getNombre());
+        usuario.setEmail(!data.getEmail().isEmpty() ? data.getEmail() : usuario.getEmail());
         usuario.setApellidos(data.getApellidos() != null ? data.getApellidos() : usuario.getApellidos());
-        usuario.setCiudad(data.getCiudad() != null ? Ciudad.valueOf(data.getCiudad()) : usuario.getCiudad());
-        if (data.getTelefono() != null) {
+        usuario.setCiudad(!data.getCiudad().equals("") ? Enum.valueOf(Ciudad.class, data.getCiudad().toUpperCase()) : usuario.getCiudad());
+        if (data.getTelefono() != 0){
             usuario.setTelefono(data.getTelefono());
         }
-        usuario.setRoles(null != data.getRoles() ? data.getRoles() : usuario.getRoles());
-        usuario.setPassword(data.getPassword() != null ? data.getPassword() : usuario.getPassword());
+        usuario.setPassword(!"".equals(data.getPassword()) ? data.getPassword() : usuario.getPassword());
 
         usuarioRepository.save(usuario);
         return "Usuario actualizado correctamente";
@@ -210,9 +212,6 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public List<Usuario> getSeguidoresByUsuario(Long usuarioId) {
     List<Usuario> seguidores = usuarioRepository.findBySeguidos_IdUsuario(usuarioId);
-        if (seguidores.isEmpty()) {
-            throw new IllegalArgumentException("No se encontraron seguidores para el usuario con ID: " + usuarioId);
-        }
         return seguidores;
     }
 
@@ -228,9 +227,6 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public List<Usuario> getSeguidosByUsuario(Long usuarioId) {
         List<Usuario> seguidos = usuarioRepository.findBySeguidores_IdUsuario(usuarioId);
-        if (seguidos.isEmpty()) {
-            throw new IllegalArgumentException("No se encontraron seguidos para el usuario con ID: " + usuarioId);
-        }
         return seguidos;
     }
 

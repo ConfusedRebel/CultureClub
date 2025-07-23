@@ -66,10 +66,11 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioDTO);
     }
 
-    @PutMapping("/{id}")
-    public String putUsuarioById(@PathVariable Long id, @RequestBody UsuarioDTO data) {
+    @PutMapping(value = "/{id}", consumes = "multipart/form-data")
+    public String putUsuarioByIdSinFoto(@PathVariable Long id, @RequestBody UsuarioDTO data) {
         return usuarioService.updateUsuario(id, data);
     }
+
 
     @PostMapping("/{id}/reportar")
     public ResponseEntity<ReporteDTO> reportarUsuario(@PathVariable Long id, @RequestBody ReporteDTO reporte)
